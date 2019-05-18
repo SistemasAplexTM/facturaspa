@@ -13,6 +13,9 @@
 		<el-menu-item index="/dashboard">
 			<i class="mdi mdi-gauge"></i><span slot="title">Dashboard</span>
 		</el-menu-item>
+		<el-menu-item index="/documents">
+			<i class="mdi mdi-file"></i><span slot="title">Documentos</span>
+		</el-menu-item>
 
 
 		<div class="el-menu-item-group__title"><span>Pages</span></div>

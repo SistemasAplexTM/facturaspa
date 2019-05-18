@@ -26,10 +26,10 @@ export default new Vuex.Store({
 
 			if(payload && payload.toolbar !== undefined)
 				state.layout.toolbar = payload.toolbar
-				
+
 			if(payload && payload.footer !== undefined)
 				state.layout.footer = payload.footer
-		
+
 			if(payload && payload.boxed !== undefined)
 				state.layout.boxed = payload.boxed
 
@@ -52,7 +52,7 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
-
+		
 	},
 	getters: {
 		layout(state, getters) {

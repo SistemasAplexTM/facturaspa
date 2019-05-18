@@ -1,3 +1,4 @@
+import { removeToken, removeUser, getToken } from '@/utils/auth'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -10,6 +11,7 @@ import Register from '../views/pages/authentication/Register.vue'
 import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import Invoice from '../views/pages/Invoice.vue'
+import Documents from '../views/documents/Index.vue'
 
 import layouts from '../layout'
 import store from '../store'
@@ -25,6 +27,17 @@ const router = new Router({
 			alias: '/dashboard',
 			name: 'dashboard',
 			component: Dashboard,
+			meta: {
+				auth: true,
+				layout: layouts.navLeft,
+				searchable: true,
+				tags: ['app']
+			}
+		},
+		{
+			path: '/documents',
+			name: 'Documentos',
+			component: Documents,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
@@ -70,6 +83,7 @@ const router = new Router({
 		{
 			path: '/logout',
 			beforeEnter (to, from, next) {
+				removeToken()
 				auth.logout()
 				next({path:'/login'})
 			}
@@ -110,7 +124,7 @@ const l = {
 //insert here login logic
 const auth = {
 	loggedIn() {
-		return store.getters.isLogged
+		return store.getters.isLogged && getToken()
 	},
 	logout() {
 		store.commit('setLogout')

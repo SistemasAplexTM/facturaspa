@@ -3,59 +3,73 @@
 		<div class="form-wrapper align-vertical-middle">
 			<div class="form-box card-base card-shadow--extraLarge">
 				<img class="image-logo" src="@/assets/images/logo.svg" alt="logo"/>
-				
+
 				<float-label class="styled">
-					<input type="email" placeholder="E-mail">
+					<input type="email" v-model="email" placeholder="E-mail">
 				</float-label>
 				<float-label class="styled">
-					<input type="password" placeholder="Password">
+					<input type="password" v-model="password" placeholder="Password">
 				</float-label>
-				
+
 				<div class="flex">
 					<div class="box grow"><el-checkbox>Remember Me </el-checkbox></div>
 					<div class="box grow text-right"><router-link to="/dashboard">Forgot Password?</router-link></div>
 				</div>
 
-				<div class="flex text-center center pt-30 pb-10">			
-					<el-button plain size="small" @click="login" class="login-btn tada animated">
+				<br>
+				<el-alert
+				v-show="error"
+				title="Error al iniciar sesión"
+				type="error"
+				:description="errorMsg"
+				show-icon>
+			</el-alert>
+				<div class="flex text-center center pt-30 pb-10">
+					<el-button plain size="small" @click="Login" class="login-btn tada animated" :loading="loading">
 						LOGIN
 					</el-button>
 				</div>
 
-				<div class="text-divider mv-10">or</div>
-
-				<div class="flex column center pt-10 pb-10">			
-					<el-button plain size="small" @click="login" class="social-btn google">
-						Log in with Google
-					</el-button>
-					<el-button plain size="small" @click="login" class="social-btn facebook">
-						Log in with Facebook
-					</el-button>
-				</div>
-
-				<div class="text-center signin-box pt-20">
-					Don't have an account? <a>Sign in</a>
-				</div>
 			</div>
 		</div>
 	</vue-scroll>
 </template>
 
 <script>
+import { login } from '@/api/login'
+import { setToken, setUser } from '@/utils/auth'
+
 export default {
 	name: 'Login',
 	data() {
 		return {
-			form: {
-				email: '',
-				password: '',
-			}
+			email: '',
+			password: '',
+			loading: false,
+			error: false,
+			errorMsg: '',
 		}
 	},
 	methods: {
-		login() {
-			this.$store.commit('setLogin')
-			this.$router.push('dashboard')
+		Login() {
+			this.loading = true
+			login(this.email, this.password, false).then(({data}) => {
+				if (data.code === 200) {
+				 this.$store.commit('setLogin')
+	    this.$router.push({ path: '/' })
+				 setToken(data.access_token)
+				 setUser(data.user)
+				}else {
+					this.error = true
+					this.errorMsg = 'Credenciales invalidas'
+				}
+				this.loading = false
+   }).catch(response => {
+				 this.error = true
+					this.loading = false
+				 // this.errorMsg = error.errors
+      console.log(response, 'asdf');
+   })
 		}
 	}
 }
@@ -72,7 +86,7 @@ export default {
 	.form-wrapper {
 		width: 100%;
 	}
-	
+
 	.form-box {
 		width: 100%;
 		max-width: 340px;
