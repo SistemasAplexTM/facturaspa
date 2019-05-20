@@ -332,18 +332,6 @@ export default {
 	}
 }*/
 
-.timeline {
-	max-width: 1200px;
-	margin: 6px;
-}
-.timeline, .timeline-title {
-	color: $text-color;
-	line-height: 1.4;
-	cursor: default;
-	font-family: inherit;
-}
-
-
 /*@media (min-width: 1200px) and (max-width: 1850px) {
 	.widget {
 		.widget-header {

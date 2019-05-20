@@ -1,20 +1,45 @@
 <template>
-	<div class="page-layout-sidebar-left scrollable only-y">
+	<div class="page-layout-sidebar-left">
 		<div class="page-header header-primary card-base card-shadow--small flex">
 			<div class="box grow">
-				<h1>Sidebar left</h1>
+				<h1>Nombre de la tienda</h1>
 			</div>
 		</div>
-		<div class="flex">
+		<div class="tales flex">
 			<div class="sidebar scrollable only-y">
 				<ul>
-					<li v-for="i in 5" :key="i">Sidebar Item {{i}}</li>
+					<li v-for="i in 20" :key="i">Sidebar Item {{i}}</li>
 				</ul>
 			</div>
-			<div class="box grow card-base card-shadow--small p-24">
-				<div style=" max-width: 1100px; margin: 0 auto; ">
+			<div class="box grow card-base card-shadow--small p-30 scrollable only-y">
+				<div class="bb mb-10 pb-15">
+					<el-button icon="el-icon-plus" type="success" size="small">Nuevo</el-button>
+					<div class="fr">
+						<el-button icon="el-icon-printer"  size="small"></el-button>
+						<el-button icon="el-icon-edit" type="primary" size="small"></el-button>
+						<el-button icon="el-icon-delete" type="danger" size="small"></el-button>
+					</div>
+				</div>
+				<div style="m-10 tales flex">
 					<h1 class="mt-8">Lorem ipsum dolor sit amet</h1>
 					<p class="mt-0">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+					</p>
+					<h1 class="mt-8">Lorem ipsum dolor sit amet</h1>
+					<p class="mt-0">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+					</p>
+					<h1 class="mt-8">Lorem ipsum dolor sit amet</h1>
+					<p class="mt-0">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent a odio malesuada, vehicula felis in, porttitor lectus. Donec venenatis nunc metus. Praesent ornare est diam, vitae finibus mauris faucibus quis. Duis magna orci, aliquam at arcu sit amet, sagittis auctor nisi. Aenean vestibulum sem eu orci ultricies, sed accumsan quam varius. Sed vulputate quis orci et ornare. Suspendisse in magna eu felis ullamcorper ultrices.
 					</p>
 				</div>
@@ -32,11 +57,11 @@ export default {
 			sidebarOpen: false
 		}
 	},
- mounted(){
-  getUsers().then(({data}) => {
-   console.log(data);
-  }).catch(error => {console.log(error);})
- }
+ // mounted(){
+ //  getUsers().then(({data}) => {
+ //   console.log(data);
+ //  }).catch(error => {console.log(error);})
+ // }
 }
 </script>
 
@@ -46,21 +71,10 @@ export default {
 .page-layout-sidebar-left {
 	.page-header {
 		margin-bottom: 20px;
-		min-height: 60px;
-
-		.menu-btn {
-			color: $background-color;
-			font-size: 20px;
-			display: none;
-			cursor: pointer;
-		}
 	}
 
-	.demo-img {
-		width: 100%;
-		max-width: 500px;
-		margin-bottom: 10px;
-		border-radius: 4px;
+	.tales{
+		max-height: 100%;
 	}
 
 	.sidebar {
@@ -68,12 +82,6 @@ export default {
 		padding: 24px;
 		min-width: 250px;
 		margin-left: -24px;
-
-		.close-btn {
-			display: none;
-			width: 100%;
-			margin-bottom: 10px;
-		}
 
 		ul {
 			width: 100%;
@@ -121,9 +129,6 @@ export default {
 			}
 		}
 		.sidebar {
-			.close-btn {
-				display: block;
-			}
 
 			margin: 0;
 			text-align: center;

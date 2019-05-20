@@ -1,6 +1,13 @@
 //@import '_variables';
 //@import "~element-ui/packages/theme-chalk/src/common/var";
 
+.fl{
+ float: left !important;
+}
+
+.fr{
+ float: right !important;
+}
 
 // Div scrollable
 .scrollable {
@@ -23,17 +30,17 @@
         &::-webkit-scrollbar {
             width: 5px;
             height: 5px;
-        } 
+        }
         &::-webkit-scrollbar-thumb, &::-webkit-scrollbar-track {
             background: transparent;
             border-radius: 5px;
-        }      
+        }
         &::-webkit-scrollbar-thumb {
             background: transparentize($text-color, 0.95);
         }
         &:hover::-webkit-scrollbar-thumb {
             background: transparentize($text-color, 0.85);
-            
+
             &:hover {
                 background: transparentize($text-color, 0.75);
             }

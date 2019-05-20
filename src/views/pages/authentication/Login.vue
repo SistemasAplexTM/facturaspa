@@ -26,7 +26,7 @@
 			</el-alert>
 				<div class="flex text-center center pt-30 pb-10">
 					<el-button plain size="small" @click="Login" class="login-btn tada animated" :loading="loading">
-						LOGIN
+						Entrar
 					</el-button>
 				</div>
 
