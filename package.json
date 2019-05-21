@@ -44,6 +44,7 @@
     "vue-d3-network": "^0.1.28",
     "vue-float-label": "^1.6.1",
     "vue-fullscreen": "^2.1.5",
+    "vue-good-table": "^2.16.4",
     "vue-i18n": "^7.8.1",
     "vue-lazyload": "^1.2.6",
     "vue-peity": "^0.5.0",

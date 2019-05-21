@@ -15,6 +15,8 @@ import vClickOutside from 'v-click-outside'
 import VirtualList from 'vue-virtual-scroll-list'
 import VueResize from 'vue-resize'
 import 'vue-resize/dist/vue-resize.css'
+import VueGoodTable from 'vue-good-table'
+import 'vue-good-table/dist/vue-good-table.css'
 import VirtualCollection from 'vue-virtual-collection'
 import VueFloatLabel from 'vue-float-label'
 import { StatusIndicator } from 'vue-status-indicator'
@@ -72,6 +74,7 @@ Vue.use(VueLazyload, {
 })
 Vue.directive('affix', Affix)
 Vue.use(Vuebar)
+Vue.use(VueGoodTable)
 Vue.component('vue-scroll', VuePerfectScrollbar)
 Vue.component('vue-virtual-list', VirtualList)
 delete L.Icon.Default.prototype._getIconUrl;
