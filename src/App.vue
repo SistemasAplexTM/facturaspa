@@ -45,7 +45,7 @@
 
 			<horizontal-nav :position="navPos" @push-page="closeSidebar" v-if="navPos === 'bottom'" style="margin-bottom:0;"/>
 
-			<Footer v-if="footer === 'below'" :position="footer"/>
+			<!-- <Footer v-if="footer === 'below'" :position="footer"/> -->
 		</div>
 
 		<vertical-nav

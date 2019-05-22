@@ -1,18 +1,22 @@
 <template>
-	<div class="page-layout-sidebar-left" style="max-width: 100%">
-		<div class="page-header header-primary card-shadow--small flex p-5 br-5">
+	<div class="page-layout-sidebar-left scrollable only-y">
+		<div class="page-header header-primary card-base card-shadow--small flex">
 			<div class="box grow">
 				<h1>Nombre de la tienda</h1>
 			</div>
+			<div class="menu-btn align-vertical" @click="sidebarOpen = !sidebarOpen">
+				<i class="mdi mdi-menu align-vertical-middle"></i>
+			</div>
 		</div>
-		<div class="h-100 flex">
-			<div class="sidebar scrollable only-y">
+		<div class="flex">
+			<div class="sidebar scrollable" :class="{'open':sidebarOpen}">
+				<el-button size="small" class="close-btn" @click="sidebarOpen = false">close</el-button>
 				<ul>
-					<li v-for="type in types" :key="type.id" @click="selectType(type.id)">{{ type.descripcion }}</li>
+					<li v-for="i in 20" :key="i">Factura de venta {{i}}</li>
 				</ul>
 			</div>
-			<div class="box grow card-base card-shadow--small p-30 scrollable only-y">
-				<!-- <h2 class="mt-8 text-center">Factura de venta</h2> -->
+			<div class="box grow card-base card-shadow--small p-24">
+
 				<div class="bb mb-10 pb-15 text-center">
 					<el-button icon="el-icon-plus" type="success" size="small" class="fl">Nuevo</el-button>
 					<h2 class="" style="display:inline">Factura de venta</h2>
@@ -49,95 +53,114 @@
 					    allLabel: 'Todos',
 					  }"
 							:responsive="true"
+							:lineNumbers="true"
 							:fixed-header="true"
-							max-height="450px"
+							max-height="550px"
 							@on-row-click="onRowClick"
-							@on-selected-rows-change="selectionChanged"
-							:selectOptions="{
-					    enabled: true,
-					    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
-					    selectionInfoClass: 'custom-class',
-					    selectionText: 'rows selected',
-					    clearSelectionText: 'clear',
-					  }"
+							@on-row-mouseenter="onRowMouseenter"
+							@on-row-mouseleave="onRowMouseleave"
 							>
 						</vue-good-table>
 					</div>
 				</div>
+
+
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import { getUsers } from '@/api/user'
-import { getTypes, getDocuments } from '@/api/document'
 export default {
 	name: 'LayoutSidebarLeft',
 	data() {
 		return {
+			sidebarOpen: false,
 			columns: [
 				{
 					label: 'Doc',
-					field: 'consecutivo',
+					field: 'name',
 
 				},
 				{
 					label: 'Fecha',
-					field: 'fecha',
+					field: 'createdAt',
 					type: 'date',
 					inputFormat: 'YYYY-MM-DD',
-					outputFormat: 'YYYY-MM-DD',
+					outputFormat: 'MMM Do YY',
 				},
 				{
 					label: 'Reg./Cant.',
-					field: 'id',
+					field: 'age',
 					type: 'number',
 					html: false,
 				},
 				{
 					label: 'Cliente',
-					field: 'client.nombre',
+					field: 'score',
+					type: 'percentage',
+					html: false,
 				},
 				{
 					label: 'Observación',
-					field: 'observacion',
+					field: 'score',
+					type: 'percentage',
+					html: false,
 				},
 				{
 					label: 'Sucursal',
-					field: 'branch.razon_social',
+					field: 'score',
+					type: 'percentage',
+					html: false,
 				},
 				{
 					label: 'Valor',
-					field: 'id',
+					field: 'score',
+					type: 'percentage',
+					html: false,
 				},
 				{
 					label: 'Recibido',
-					field: 'id',
+					field: 'score',
+					type: 'percentage',
+					html: false,
 				},
 			],
-			rows: [],
-			showActions: false,
-			types: []
+			rows: [
+				{id:1, name:"John",age:20,createdAt: '2010-10-31',score: 0.03343},
+				{id:2, name:"Jane",age:24,createdAt: '2011-10-31',score: 0.03343},
+				{id:3, name:"Susan",age:16,createdAt: '2011-10-30',score: 0.03343},
+				{id:4, name:"Chris",age:55,createdAt: '2011-10-11',score: 0.03343},
+				{id:5, name:"Dan",age:40,createdAt: '2011-10-21',score: 0.03343},
+				{id:6, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:7, name:"Jane",age:24,createdAt: '20111031'},
+				{id:8, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:9, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
+			],
+			showActions: false
 		}
 	},
- mounted(){
-  getTypes().then(({data}) => {
-   this.types = data;
-  }).catch(error => {console.log(error);})
- },
 	methods: {
-		selectType(id){
-			getDocuments(id).then(({data}) => {
-				this.rows = data;
-	  }).catch(error => {console.log(error);})
+		onRowClick(params) {
+				console.log(params.row);
 		},
-  onRowClick(params) {
-			// this.showActions = true
-    console.log(params.row);
-  },
-		selectionChanged(){
-			// alert('Hola')
+		onRowMouseleave(row, pageIndex) {
+			this.showActions = false
+		},
+		onRowMouseenter(params){
 			this.showActions = true
 		}
 	}
@@ -147,23 +170,24 @@ export default {
 <style lang="scss" scoped>
 @import '../../assets/scss/_variables';
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .2s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-
 .page-layout-sidebar-left {
-	margin-bottom: 80px;
 	.page-header {
-		border-radius: 5px;
-		padding-left: 15px;
 		margin-bottom: 20px;
+		min-height: 60px;
+
+		.menu-btn {
+			color: $background-color;
+			font-size: 20px;
+			display: none;
+			cursor: pointer;
+		}
 	}
 
-	.h-100{
-		max-height: 100%;
+	.demo-img {
+		width: 100%;
+		max-width: 500px;
+		margin-bottom: 10px;
+		border-radius: 4px;
 	}
 
 	.sidebar {
@@ -171,6 +195,12 @@ export default {
 		padding: 24px;
 		min-width: 250px;
 		margin-left: -24px;
+
+		.close-btn {
+			display: none;
+			width: 100%;
+			margin-bottom: 10px;
+		}
 
 		ul {
 			width: 100%;
@@ -218,6 +248,9 @@ export default {
 			}
 		}
 		.sidebar {
+			.close-btn {
+				display: block;
+			}
 
 			margin: 0;
 			text-align: center;
