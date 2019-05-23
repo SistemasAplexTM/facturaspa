@@ -12,6 +12,7 @@ import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import Invoice from '../views/pages/Invoice.vue'
 import Documents from '../views/documents/Index.vue'
+import LayoutLeft from '../views/documents/LayoutSidebarLeft.vue'
 
 import layouts from '../layout'
 import store from '../store'
@@ -38,6 +39,17 @@ const router = new Router({
 			path: '/documents',
 			name: 'Documentos',
 			component: Documents,
+			meta: {
+				auth: true,
+				layout: layouts.navLeft,
+				searchable: true,
+				tags: ['app']
+			}
+		},
+		{
+			path: '/LayoutLeft',
+			name: 'LayoutLeft',
+			component: LayoutLeft,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,

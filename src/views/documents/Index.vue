@@ -1,21 +1,21 @@
 <template>
-	<div class="page-layout-sidebar-left">
-		<div class="page-header header-primary card-base card-shadow--small flex">
+	<div class="page-layout-sidebar-left" style="max-width: 100%">
+		<div class="page-header header-primary card-shadow--small flex p-5 br-5">
 			<div class="box grow">
 				<h1>Nombre de la tienda</h1>
 			</div>
 		</div>
 		<div class="h-100 flex">
-			<div class="sidebar scrollable only-y">
+			<div class="sidebar scrollable only-y" v-loading="loadingSidebar">
 				<ul>
-					<li v-for="i in 20" :key="i">Factura de venta {{i}}</li>
+					<li v-for="type in types" :key="type.id" @click="selectType(type)">{{ type.descripcion }}</li>
 				</ul>
 			</div>
 			<div class="box grow card-base card-shadow--small p-30 scrollable only-y">
 				<!-- <h2 class="mt-8 text-center">Factura de venta</h2> -->
 				<div class="bb mb-10 pb-15 text-center">
-					<el-button icon="el-icon-plus" type="success" size="small" class="fl">Nuevo</el-button>
-					<h2 class="" style="display:inline">Factura de venta</h2>
+					<el-button icon="el-icon-plus" type="success" size="small" class="fl" @click="test">Nuevo</el-button>
+					<h2 class="" style="display:inline">{{ type_selected_name }}</h2>
 					<transition name="fade">
 						<div class="fr" v-show="showActions">
 							<el-button icon="el-icon-printer"  size="small"></el-button>
@@ -24,15 +24,17 @@
 						</div>
 					</transition>
 				</div>
+
 				<div style="m-10 h-100 flex">
 					<div class="vue-good-table-box card-base card-shadow--medium">
 						<vue-good-table
+							mode="remote"
+							:totalRows="totalRecords"
 							:columns="columns"
 							:rows="rows"
 							:search-options="{
 					    enabled: true,
-									placeholder: 'Buscar',
-					  }"
+								}"
 							:pagination-options="{
 					    enabled: true,
 					    mode: 'Registros',
@@ -40,7 +42,6 @@
 					    position: 'bottom',
 					    perPageDropdown: [10, 20, 30],
 					    dropdownAllowAll: false,
-					    setCurrentPage: 2,
 					    nextLabel: 'Siguiente',
 					    prevLabel: 'Anterior',
 					    rowsPerPageLabel: 'Registros por página',
@@ -49,12 +50,22 @@
 					    allLabel: 'Todos',
 					  }"
 							:responsive="true"
-							:lineNumbers="true"
+							:isLoading.sync="isLoading"
 							:fixed-header="true"
 							max-height="550px"
 							@on-row-click="onRowClick"
-							@on-row-mouseenter="onRowMouseenter"
-							@on-row-mouseleave="onRowMouseleave"
+							@on-selected-rows-change="selectionChanged"
+							@on-page-change="onPageChange"
+					  @on-sort-change="onSortChange"
+					  @on-filter="onColumnFilter"
+					  @on-per-page-change="onPerPageChange"
+							:selectOptions="{
+					    enabled: true,
+					    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
+					    selectionInfoClass: 'custom-class',
+					    selectionText: 'rows selected',
+					    clearSelectionText: 'clear',
+					  }"
 							>
 						</vue-good-table>
 					</div>
@@ -66,103 +77,133 @@
 
 <script>
 import { getUsers } from '@/api/user'
+import { getTypes, getDocuments, testDetail } from '@/api/document'
 export default {
 	name: 'LayoutSidebarLeft',
 	data() {
 		return {
+			type_selected: null,
+			type_selected_name: 'asdlaksml',
+			isLoading: false,
+			loadingSidebar: false,
 			columns: [
 				{
 					label: 'Doc',
-					field: 'name',
-
+					field: 'consecutivo'
 				},
 				{
 					label: 'Fecha',
-					field: 'createdAt',
+					field: 'fecha',
 					type: 'date',
 					inputFormat: 'YYYY-MM-DD',
-					outputFormat: 'MMM Do YY',
+					outputFormat: 'YYYY-MM-DD',
 				},
 				{
 					label: 'Reg./Cant.',
-					field: 'age',
+					field: 'id',
 					type: 'number',
 					html: false,
 				},
 				{
 					label: 'Cliente',
-					field: 'score',
-					type: 'percentage',
-					html: false,
+					field: 'client.nombre',
+				 sortable: false
 				},
 				{
 					label: 'Observación',
-					field: 'score',
-					type: 'percentage',
-					html: false,
+					field: 'observacion',
 				},
 				{
 					label: 'Sucursal',
-					field: 'score',
-					type: 'percentage',
-					html: false,
+					field: 'branch.razon_social',
+				 sortable: false
 				},
 				{
 					label: 'Valor',
-					field: 'score',
-					type: 'percentage',
-					html: false,
+					field: 'id',
 				},
 				{
 					label: 'Recibido',
-					field: 'score',
-					type: 'percentage',
-					html: false,
+					field: 'id',
 				},
 			],
-			rows: [
-				{id:1, name:"John",age:20,createdAt: '2010-10-31',score: 0.03343},
-				{id:2, name:"Jane",age:24,createdAt: '2011-10-31',score: 0.03343},
-				{id:3, name:"Susan",age:16,createdAt: '2011-10-30',score: 0.03343},
-				{id:4, name:"Chris",age:55,createdAt: '2011-10-11',score: 0.03343},
-				{id:5, name:"Dan",age:40,createdAt: '2011-10-21',score: 0.03343},
-				{id:6, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:7, name:"Jane",age:24,createdAt: '20111031'},
-				{id:8, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:9, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-				{id:10, name:"John",age:20,createdAt: '2011-10-31',score: 0.03343},
-			],
-			showActions: false
+			rows: [],
+			totalRecords: 0,
+			serverParams: {
+    columnFilters: {
+    },
+    sort: {
+      field: 'consecutivo',
+      type: 'asc',
+    },
+    page: 0,
+    perPage: 10
+   },
+			showActions: false,
+			types: []
 		}
 	},
- // mounted(){
- //  getUsers().then(({data}) => {
- //   console.log(data);
- //  }).catch(error => {console.log(error);})
- // }
+ mounted(){
+		this.loadingSidebar = true
+  getTypes().then(({data}) => {
+   this.types = data;
+			this.loadingSidebar = false
+			this.isLoading = false
+  }).catch(error => {console.log(error);})
+ },
 	methods: {
+		test(){
+			testDetail().then(({data}) => {
+				console.log(data);
+			}).catch(error => {console.log(error)})
+		},
+		selectType(type){
+			this.type_selected = type.id
+			this.type_selected_name = type.descripcion
+			this.isLoading = true
+			this.loadItems()
+		},
   onRowClick(params) {
+			// this.showActions = true
     console.log(params.row);
   },
-		onRowMouseleave(row, pageIndex) {
-			this.showActions = false
-  },
-		onRowMouseenter(params){
+		selectionChanged(){
+			// alert('Hola')
 			this.showActions = true
-		}
-}
+		},
+		updateParams(newProps) {
+    this.serverParams = Object.assign({}, this.serverParams, newProps);
+  },
+  onPageChange(params) {
+    this.updateParams({page: params.currentPage - 1});
+    this.loadItems();
+  },
+  onPerPageChange(params) {
+    this.updateParams({perPage: params.currentPerPage});
+    this.loadItems();
+  },
+  onSortChange(params) {
+   this.updateParams({
+    sort: {
+     type: params[0].type,
+     field: params[0].field,
+    },
+   });
+   this.loadItems();
+  },
+  onColumnFilter(params) {
+    this.updateParams(params);
+    this.loadItems();
+  },
+  loadItems() {
+			if (this.type_selected != null) {
+				getDocuments(this.type_selected, this.serverParams).then(({data}) => {
+					this.totalRecords = data.totalRecords;
+					this.rows = data.rows;
+				});
+			}
+  }
+	}
 }
 </script>
 
@@ -179,6 +220,8 @@ export default {
 .page-layout-sidebar-left {
 	margin-bottom: 80px;
 	.page-header {
+		border-radius: 5px;
+		padding-left: 15px;
 		margin-bottom: 20px;
 	}
 
