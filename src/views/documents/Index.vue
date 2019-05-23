@@ -6,16 +6,16 @@
 			</div>
 		</div>
 		<div class="h-100 flex">
-			<div class="sidebar scrollable only-y">
+			<div class="sidebar scrollable only-y" v-loading="loadingSidebar">
 				<ul>
-					<li v-for="type in types" :key="type.id" @click="selectType(type.id)">{{ type.descripcion }}</li>
+					<li v-for="type in types" :key="type.id" @click="selectType(type)">{{ type.descripcion }}</li>
 				</ul>
 			</div>
 			<div class="box grow card-base card-shadow--small p-30 scrollable only-y">
 				<!-- <h2 class="mt-8 text-center">Factura de venta</h2> -->
 				<div class="bb mb-10 pb-15 text-center">
-					<el-button icon="el-icon-plus" type="success" size="small" class="fl">Nuevo</el-button>
-					<h2 class="" style="display:inline">Factura de venta</h2>
+					<el-button icon="el-icon-plus" type="success" size="small" class="fl" @click="test">Nuevo</el-button>
+					<h2 class="" style="display:inline">{{ type_selected_name }}</h2>
 					<transition name="fade">
 						<div class="fr" v-show="showActions">
 							<el-button icon="el-icon-printer"  size="small"></el-button>
@@ -24,15 +24,17 @@
 						</div>
 					</transition>
 				</div>
+
 				<div style="m-10 h-100 flex">
 					<div class="vue-good-table-box card-base card-shadow--medium">
 						<vue-good-table
+							mode="remote"
+							:totalRows="totalRecords"
 							:columns="columns"
 							:rows="rows"
 							:search-options="{
 					    enabled: true,
-									placeholder: 'Buscar',
-					  }"
+								}"
 							:pagination-options="{
 					    enabled: true,
 					    mode: 'Registros',
@@ -40,7 +42,6 @@
 					    position: 'bottom',
 					    perPageDropdown: [10, 20, 30],
 					    dropdownAllowAll: false,
-					    setCurrentPage: 2,
 					    nextLabel: 'Siguiente',
 					    prevLabel: 'Anterior',
 					    rowsPerPageLabel: 'Registros por página',
@@ -49,10 +50,15 @@
 					    allLabel: 'Todos',
 					  }"
 							:responsive="true"
+							:isLoading.sync="isLoading"
 							:fixed-header="true"
-							max-height="450px"
+							max-height="550px"
 							@on-row-click="onRowClick"
 							@on-selected-rows-change="selectionChanged"
+							@on-page-change="onPageChange"
+					  @on-sort-change="onSortChange"
+					  @on-filter="onColumnFilter"
+					  @on-per-page-change="onPerPageChange"
 							:selectOptions="{
 					    enabled: true,
 					    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
@@ -71,16 +77,19 @@
 
 <script>
 import { getUsers } from '@/api/user'
-import { getTypes, getDocuments } from '@/api/document'
+import { getTypes, getDocuments, testDetail } from '@/api/document'
 export default {
 	name: 'LayoutSidebarLeft',
 	data() {
 		return {
+			type_selected: null,
+			type_selected_name: 'asdlaksml',
+			isLoading: false,
+			loadingSidebar: false,
 			columns: [
 				{
 					label: 'Doc',
-					field: 'consecutivo',
-
+					field: 'consecutivo'
 				},
 				{
 					label: 'Fecha',
@@ -98,6 +107,7 @@ export default {
 				{
 					label: 'Cliente',
 					field: 'client.nombre',
+				 sortable: false
 				},
 				{
 					label: 'Observación',
@@ -106,6 +116,7 @@ export default {
 				{
 					label: 'Sucursal',
 					field: 'branch.razon_social',
+				 sortable: false
 				},
 				{
 					label: 'Valor',
@@ -117,20 +128,40 @@ export default {
 				},
 			],
 			rows: [],
+			totalRecords: 0,
+			serverParams: {
+    columnFilters: {
+    },
+    sort: {
+      field: 'consecutivo',
+      type: 'asc',
+    },
+    page: 0,
+    perPage: 10
+   },
 			showActions: false,
 			types: []
 		}
 	},
  mounted(){
+		this.loadingSidebar = true
   getTypes().then(({data}) => {
    this.types = data;
+			this.loadingSidebar = false
+			this.isLoading = false
   }).catch(error => {console.log(error);})
  },
 	methods: {
-		selectType(id){
-			getDocuments(id).then(({data}) => {
-				this.rows = data;
-	  }).catch(error => {console.log(error);})
+		test(){
+			testDetail().then(({data}) => {
+				console.log(data);
+			}).catch(error => {console.log(error)})
+		},
+		selectType(type){
+			this.type_selected = type.id
+			this.type_selected_name = type.descripcion
+			this.isLoading = true
+			this.loadItems()
 		},
   onRowClick(params) {
 			// this.showActions = true
@@ -139,7 +170,39 @@ export default {
 		selectionChanged(){
 			// alert('Hola')
 			this.showActions = true
-		}
+		},
+		updateParams(newProps) {
+    this.serverParams = Object.assign({}, this.serverParams, newProps);
+  },
+  onPageChange(params) {
+    this.updateParams({page: params.currentPage - 1});
+    this.loadItems();
+  },
+  onPerPageChange(params) {
+    this.updateParams({perPage: params.currentPerPage});
+    this.loadItems();
+  },
+  onSortChange(params) {
+   this.updateParams({
+    sort: {
+     type: params[0].type,
+     field: params[0].field,
+    },
+   });
+   this.loadItems();
+  },
+  onColumnFilter(params) {
+    this.updateParams(params);
+    this.loadItems();
+  },
+  loadItems() {
+			if (this.type_selected != null) {
+				getDocuments(this.type_selected, this.serverParams).then(({data}) => {
+					this.totalRecords = data.totalRecords;
+					this.rows = data.rows;
+				});
+			}
+  }
 	}
 }
 </script>

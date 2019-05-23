@@ -7,9 +7,17 @@ export function getTypes() {
   })
 }
 
-export function getDocuments(id) {
+export function getDocuments(id, data) {
   return request({
     url: '/document/getDocuments/'+id,
+    method: 'post',
+    data
+  })
+}
+
+export function testDetail() {
+  return request({
+    url: '/document/testDetail',
     method: 'get'
   })
 }
