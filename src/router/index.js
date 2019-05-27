@@ -17,6 +17,8 @@ import LayoutLeft from '../views/documents/LayoutSidebarLeft.vue'
 import layouts from '../layout'
 import store from '../store'
 
+import reports from './modules/reports'
+
 Vue.use(Router)
 
 
@@ -92,6 +94,7 @@ const router = new Router({
 				layout: layouts.contenOnly
 			}
 		},
+		reports,
 		{
 			path: '/logout',
 			beforeEnter (to, from, next) {

@@ -16,6 +16,9 @@
 		<el-menu-item index="/documents">
 			<i class="mdi mdi-file"></i><span slot="title">Documentos</span>
 		</el-menu-item>
+		<el-menu-item index="/reports">
+			<i class="mdi mdi-file"></i><span slot="title">Informes</span>
+		</el-menu-item>
 
 
 		<div class="el-menu-item-group__title"><span>Pages</span></div>
