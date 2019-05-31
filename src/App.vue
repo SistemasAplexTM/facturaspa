@@ -158,14 +158,14 @@ export default {
 			height: 60px;
 			margin-bottom: 20px;
 			margin-top: 10px;
-			margin-left: 30px;
-			margin-right: 30px;
+			margin-left: 0px;
+			margin-right: 0px;
 		}
 
 		.main {
 			position: relative;
 			overflow: hidden;
-			padding: 0 30px;
+			padding: 0 0px;
 		}
 
 		.view {

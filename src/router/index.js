@@ -11,13 +11,14 @@ import Register from '../views/pages/authentication/Register.vue'
 import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import Invoice from '../views/pages/Invoice.vue'
-import Documents from '../views/documents/Index.vue'
+
 import LayoutLeft from '../views/documents/LayoutSidebarLeft.vue'
 
 import layouts from '../layout'
 import store from '../store'
 
 import reports from './modules/reports'
+import documents from './modules/documents'
 
 Vue.use(Router)
 
@@ -30,17 +31,6 @@ const router = new Router({
 			alias: '/dashboard',
 			name: 'dashboard',
 			component: Dashboard,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app']
-			}
-		},
-		{
-			path: '/documents',
-			name: 'Documentos',
-			component: Documents,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
@@ -95,6 +85,7 @@ const router = new Router({
 			}
 		},
 		reports,
+		documents,
 		{
 			path: '/logout',
 			beforeEnter (to, from, next) {
@@ -113,7 +104,6 @@ const router = new Router({
 		}
 	]
 })
-
 
 const l = {
 	contenOnly(){

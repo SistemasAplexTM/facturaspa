@@ -43,7 +43,7 @@ import 'flag-icon-css/css/flag-icon.css'
 import '../node_modules/mdi/scss/materialdesignicons.scss'
 import Affix from './directives/affix'
 import App from './App.vue'
-import router from './router/'
+import router from './router'
 import store from './store'
 import i18n_messages from './i18n.json'
 

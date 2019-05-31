@@ -14,10 +14,3 @@ export function getDocuments(id, data) {
     data
   })
 }
-
-export function testDetail() {
-  return request({
-    url: '/document/testDetail',
-    method: 'get'
-  })
-}
