@@ -1,5 +1,5 @@
 <template>
- <div class="">
+ <div class="" v-if="!modalPrint">
   <el-button type="success" size="small" icon="el-icon-plus" @click="reset(true)" class="fl">Nueva factura</el-button>
   <div class="text-right mb-12">
     <!-- <el-button type="default" size="small" icon="el-icon-tickets" @click="listDocuments">Listar</el-button> -->
@@ -214,19 +214,19 @@
   </el-dialog>
 
  </div>
- <!-- <print-document v-else  @modalPrint="modalPrint = false" :id_document="id_document"/> -->
+ <print-document v-else @modalPrint="printFinihs" :id_document="id_document"/>
 </template>
 
 <script>
 import FormDocument from './Form'
 import ListDocuments from './List'
-// import PrintDocument from './printDocument'
+import PrintDocument from './printDocument'
 import accounting from 'accounting-js'
-import { save, update, savePaymentMethod, validateCashRegister, saveCashRegister } from '@/api/document'
+import { save, update, savePaymentMethod, validateCashRegister, saveCashRegister } from '@/api/document/document'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    FormDocument, ListDocuments
+    FormDocument, ListDocuments, PrintDocument
   },
   data(){
   	return {
@@ -435,7 +435,6 @@ export default {
 
         });
       }else{
-        me.modalPrint = false
         me.fresh()
       }
     },
@@ -501,7 +500,6 @@ export default {
       setTimeout(function () {
         me.$refs.formDocument.resetForm()
       }, 300);
-
     },
     refreshTable(){
       this.$refs.list.refresh()
@@ -511,7 +509,7 @@ export default {
     },
     submit(){
       this.loading = true
-      let setup = JSON.parse(localStorage.getItem('setup'))
+      // let setup = JSON.parse(localStorage.getItem('setup'))
       let data = {
         form_document: this.form_document,
         table_detail: this.table_detail,
@@ -581,7 +579,7 @@ export default {
         'ce': me.ce,
         'po': me.po,
       }
-      savePaymentMethod(data).then(({data}) => {
+    savePaymentMethod(data).then(({data}) => {
         this.$message.success('Factura finalizada con éxito.')
         this.modalPrint = true
         // me.reset(false)
@@ -589,6 +587,11 @@ export default {
         this.$message.error('Error al finalizar la factura.')
         console.log(error)
       })
+    },
+    printFinihs(){
+     console.log('FUNCIÖN DE IMPRIMIR');
+     this.modalPrint = false
+     this.reset(false)
     },
     buttonsPayment(){
       this.buttons = []
@@ -599,7 +602,7 @@ export default {
         total += this.apx_base
       }
     },
-    format(val){
+   format(val){
 			var options = {
 				symbol : "$ ",
 				decimal : ",",

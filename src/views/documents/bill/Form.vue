@@ -181,7 +181,7 @@ export default {
 		this.form.date = new Date();
 		this.form.date_receip = new Date();
 	},
-  methods:{
+ methods:{
 		setDataDocument(data){
 			this.$store.commit('SET_WHOLESALE', data.document.pormayor)
 			this.$store.commit('SET_TABLE_DETAIL', data.detail)
@@ -274,6 +274,7 @@ export default {
 			this.client = {}
 			this.seller = ''
 			this.form.date = new Date()
+			this.form.observation = null
 			this.form.date_receip = new Date()
 			this.form.days = 0
 			this.$refs.detail.reset()

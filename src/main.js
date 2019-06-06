@@ -88,6 +88,17 @@ Vue.component('l-marker', Vue2Leaflet.LMarker)
 Vue.component('l-tile-layer', Vue2Leaflet.LTileLayer)
 const i18n = new VueI18n({ locale: 'us', messages:i18n_messages })
 
+import money from 'v-money'
+// register directive v-money and component <money>
+Vue.use(money, {
+  decimal: ',',
+  thousands: '.',
+  prefix: '$ ',
+  suffix: '',
+  precision: 0,
+  masked: false /* doesn't work with directive */
+})
+
 new Vue({
 	i18n,
 	router,

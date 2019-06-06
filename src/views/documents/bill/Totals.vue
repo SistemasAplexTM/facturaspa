@@ -108,7 +108,8 @@
 			  	<el-col :span="12" class="text-right">
 			  		<el-input placeholder="Buscar" size="mini" v-model="cupon" @keyup.enter.native="(cupon) ? searchCupon() : false">
 							<el-button slot="append" size="mini" type="danger" @click="searchCupon()" :disabled="!cupon">
-								<i class="fal fa-tag icon-menu"></i>
+								<i v-if="!loadingCupon" class="fal fa-tag icon-menu"></i>
+								<i v-else class="fal fa-spinner fa-spin icon-menu"></i>
 							</el-button>
 						</el-input>
 			  	</el-col>
@@ -119,7 +120,7 @@
 <script>
 import accounting from 'accounting-js';
 import { mapGetters } from 'vuex'
-import { getCupon } from '@/api/document'
+import { getCupon } from '@/api/document/document'
 
 export default {
   computed:{
@@ -152,7 +153,8 @@ export default {
   },
   data(){
   	return {
-  		animatedNumber: 0,
+			loadingCupon: false,
+ 		animatedNumber: 0,
 			subtotal_1: 0,
 			descuento_1: 0,
 			descuento_2:0,
@@ -175,6 +177,7 @@ export default {
 			this.$store.dispatch('updateSubtotal', null)
 		},
 		searchCupon(){
+			this.loadingCupon = true
 			getCupon(this.cupon).then(({data}) => {
 				if(data.code == 200){
 					this.$confirm(data.msg, 'Perfecto!', {
@@ -189,6 +192,7 @@ export default {
 							message: 'Descuento aplicado'
 						});
 						this.cupon = null
+						this.loadingCupon = false
 						this.$store.commit('SET_DESCUENTO_2', data.data.descuento)
 						this.$store.dispatch('updateSubtotal', null)
 					}).catch(() => {
@@ -205,11 +209,13 @@ export default {
 						duration: 5000
 					});
 				}
+				this.loadingCupon = false
 			}).catch(error => {
 					console.log(error)
 			});
 		},
 		animateNumber(val, oldVal, name){
+			var TWEEN = require('@tweenjs/tween.js');
 			var vm = this
 			var animationFrame
 			function animate (time) {
@@ -217,30 +223,30 @@ export default {
 				animationFrame = requestAnimationFrame(animate)
 			}
 			new TWEEN.Tween({ tweeningNumber: oldVal })
-				.easing(TWEEN.Easing.Quadratic.Out)
 				.to({ tweeningNumber: val }, 500)
-				.onUpdate(function () {
+				.easing(TWEEN.Easing.Quadratic.Out)
+				.onUpdate(function (obj) {
 					switch (name) {
 						case 'neto':
-								vm.neto = this.tweeningNumber.toFixed(0)
+								vm.neto = obj.tweeningNumber.toFixed(0)
 							break;
 						case 'subtotal_1':
-								vm.subtotal_1 = this.tweeningNumber.toFixed(0)
+								vm.subtotal_1 = obj.tweeningNumber.toFixed(0)
 							break;
 						case 'descuento_1':
-								vm.descuento_1 = this.tweeningNumber.toFixed(0)
+								vm.descuento_1 = obj.tweeningNumber.toFixed(0)
 							break;
 						case 'descuento_2':
-							 vm.descuento_2 = this.tweeningNumber.toFixed(0)
+							 vm.descuento_2 = obj.tweeningNumber.toFixed(0)
 						 break;
 						case 'subtotal_2':
-								vm.subtotal_2 = this.tweeningNumber.toFixed(0)
+								vm.subtotal_2 = obj.tweeningNumber.toFixed(0)
 							break;
 						case 'iva':
-								vm.iva = this.tweeningNumber.toFixed(0)
+								vm.iva = obj.tweeningNumber.toFixed(0)
 							break;
 						case 'total':
-								vm.total = this.tweeningNumber.toFixed(0)
+								vm.total = obj.tweeningNumber.toFixed(0)
 							break;
 						default:
 					}

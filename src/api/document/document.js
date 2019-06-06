@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function save(data) {
   return request({
-    url: 'api/document/save',
+    url: 'document/save',
     method: 'post',
     data
   })
@@ -10,7 +10,7 @@ export function save(data) {
 
 export function update(data, id) {
   return request({
-    url: 'api/document/update/' + id,
+    url: 'document/update/' + id,
     method: 'put',
     data
   })
@@ -18,15 +18,7 @@ export function update(data, id) {
 
 export function savePaymentMethod(data) {
   return request({
-    url: 'api/document/savePaymentMethod',
-    method: 'post',
-    data
-  })
-}
-
-export function getProductByCode(data) {
-  return request({
-    url: 'api/getProductByCode',
+    url: 'document/savePaymentMethod',
     method: 'post',
     data
   })
@@ -34,35 +26,35 @@ export function getProductByCode(data) {
 
 export function getCupon(data) {
   return request({
-    url: 'api/document/getCupon/' + data,
+    url: 'document/getCupon/' + data,
     method: 'get'
   })
 }
 
 export function searchThird(data, type) {
   return request({
-    url: 'api/terceros/terceroSearch/' + data + '/' + type,
+    url: 'terceros/terceroSearch/' + data + '/' + type,
     method: 'get'
   })
 }
 
 export function documentById(id) {
   return request({
-    url: 'api/document/documentById/' + id,
+    url: 'document/documentById/' + id,
     method: 'get'
   })
 }
 
 export function validateCashRegister() {
   return request({
-    url: 'api/document/validateCashRegister',
+    url: 'document/validateCashRegister',
     method: 'get'
   })
 }
 
 export function saveCashRegister(data) {
   return request({
-    url: 'api/document/saveCashRegister',
+    url: 'document/saveCashRegister',
     method: 'post',
     data
   })

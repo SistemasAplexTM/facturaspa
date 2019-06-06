@@ -76,8 +76,9 @@
 
 <script>
 	import accounting from 'accounting-js';
-	import { getProductByCode } from '@/api/document'
+	import { getByCode as getProductByCode } from '@/api/product'
 	import { mapGetters } from 'vuex'
+	import { getUser } from '@/utils/auth'
 
 	export default {
 		data(){
@@ -120,8 +121,9 @@
 		},
 		methods:{
 			getBranchOfficeId(){
-				var data = JSON.parse(localStorage.getItem('setup'));
-				return data.branch_office_id
+				var data = getUser();
+				return data.sucursal_id
+				// return 2
 			},
 			getData(code){
 				this.loading = true
@@ -166,10 +168,10 @@
 							message: data.msg
 						});
 					}
-        }).catch(error => {
-          	console.log(error)
+    }).catch(error => {
+     	console.log(error)
 						this.loading = false
-        });
+   		});
 			},
 			calculateMonto(index, cantidad){
 				let me = this

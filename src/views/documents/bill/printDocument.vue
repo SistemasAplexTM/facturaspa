@@ -119,7 +119,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
   *{
       font-size: 12px;
@@ -165,7 +165,7 @@ export default {
   }
 
 @media print{
-  .layout-container .container .footer ,
+ .layout-container .container .footer ,
 	.layout-container .container .header ,
 	.layout-container .container .horizontal-nav ,
 	.layout-container .footer ,
@@ -174,8 +174,8 @@ export default {
 	.layout-container .header {
 		display:none;
 	}
-  .print-toolbar {
-    display: none;
-  }
+ .print-toolbar {
+   display: none;
+ }
 }
 </style>
