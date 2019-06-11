@@ -24,7 +24,6 @@
 			v-if="navPos === 'left'"/>
 
 		<div class="container flex column box grow">
-
 			<div class="header" v-if="toolbar === 'top'">
 				<Toolbar @toggle-sidebar="openSidebar = !openSidebar" :menu-burger="navPos"/>
 			</div>
@@ -32,7 +31,6 @@
 			<div class="header" v-if="toolbar === 'bottom'">
 				<Toolbar @toggle-sidebar="openSidebar = !openSidebar" :menu-burger="navPos"/>
 			</div>
-
 			<div class="main box grow flex">
 				<span class="main-out-border--top-left" v-if="roundedCorners"></span>
 				<span class="main-out-border--top-right" v-if="roundedCorners"></span>
@@ -42,9 +40,7 @@
 					<router-view class="view box grow"/>
 				</transition>
 			</div>
-
 			<horizontal-nav :position="navPos" @push-page="closeSidebar" v-if="navPos === 'bottom'" style="margin-bottom:0;"/>
-
 			<!-- <Footer v-if="footer === 'below'" :position="footer"/> -->
 		</div>
 
