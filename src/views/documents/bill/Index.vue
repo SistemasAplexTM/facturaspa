@@ -234,7 +234,7 @@ export default {
       modalBC: false,
       modalPrint: false,
       id_document: null,
-  		editing: false,
+  		  editing: false,
       loading: false,
       modalFP: false,
       input: null,

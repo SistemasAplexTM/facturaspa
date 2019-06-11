@@ -2,19 +2,21 @@
 	<div class="page-layout-sidebar-left" style="max-width: 100%">
 		<div class="page-header header-primary card-shadow--small flex p-5 br-5">
 			<div class="box grow">
-				<h1>Nombre de la tienda</h1>
+				<h1>{{ user.branch.razon_social }}</h1>
 			</div>
 		</div>
 		<div class="h-100 flex">
 			<div class="sidebar scrollable only-y" v-loading="loadingSidebar">
 				<ul>
-					<li v-for="type in types" :key="type.id" @click="selectType(type)">{{ type.descripcion }}</li>
+					<li v-for="type in types" :key="type.id" @click="selectType(type.type)">
+						<i :class="'fal fa-'+ type.type.icono + ' icon-menu'"></i> {{ type.type.descripcion }}
+					</li>
 				</ul>
 			</div>
-			<div class="box grow card-base card-shadow--small p-30 scrollable only-y">
+			<div v-if="type_selected_name != 'Tipo de documento'" class="box grow card-base card-shadow--small p-30 scrollable only-y">
 				<!-- <h2 class="mt-8 text-center">Factura de venta</h2> -->
 				<div class="bb mb-10 pb-15 text-center">
-					<el-button icon="el-icon-plus" type="success" size="small" class="fl" @click="$router.push('/bill')">Nuevo</el-button>
+					<el-button icon="el-icon-plus" type="success" size="small" class="fl" @click="newFile">Nuevo</el-button>
 					<h2 class="" style="display:inline">{{ type_selected_name }}</h2>
 					<transition name="fade">
 						<div class="fr" v-show="showActions">
@@ -24,7 +26,6 @@
 						</div>
 					</transition>
 				</div>
-
 				<div style="m-10 h-100 flex">
 					<div class="vue-good-table-box card-base card-shadow--medium">
 						<vue-good-table
@@ -71,19 +72,28 @@
 					</div>
 				</div>
 			</div>
+			<div v-else class="box grow card-base card-shadow--small p-100 scrollable only-y text-center">
+				<div class="o-050">
+					<i class="fal fa-file fa-10x"></i>
+					<h1>Documentos</h1>
+					<p>Seleccione un tipo de documento para cargar la información.</p>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import { getUsers } from '@/api/user'
+import accounting from 'accounting-js';
+import { getUser } from '@/utils/auth'
 import { getTypes, getDocuments } from '@/api/document'
 export default {
 	name: 'LayoutSidebarLeft',
 	data() {
 		return {
+			user: getUser(),
 			type_selected: null,
-			type_selected_name: 'asdlaksml',
+			type_selected_name: 'Tipo de documento',
 			isLoading: false,
 			loadingSidebar: false,
 			columns: [
@@ -94,37 +104,30 @@ export default {
 				{
 					label: 'Fecha',
 					field: 'fecha',
-					type: 'date',
-					inputFormat: 'YYYY-MM-DD',
-					outputFormat: 'YYYY-MM-DD',
-				},
-				{
-					label: 'Reg./Cant.',
-					field: 'id',
-					type: 'number',
-					html: false,
+					thClass: 'text-center',
+					tdClass: 'text-center',
+					width: '90px',
 				},
 				{
 					label: 'Cliente',
 					field: 'client.nombre',
-				 sortable: false
+				 sortable: false,
 				},
 				{
 					label: 'Observación',
 					field: 'observacion',
 				},
 				{
-					label: 'Sucursal',
-					field: 'branch.razon_social',
-				 sortable: false
-				},
-				{
 					label: 'Valor',
-					field: 'id',
+					field: 'total_venta',
+					formatFn: this.format,
+					width: '100px',
 				},
 				{
 					label: 'Recibido',
 					field: 'id',
+					formatFn: this.format,
+					width: '100px',
 				},
 			],
 			rows: [],
@@ -134,7 +137,7 @@ export default {
     },
     sort: {
       field: 'consecutivo',
-      type: 'asc',
+      type: 'desc',
     },
     page: 0,
     perPage: 10
@@ -145,13 +148,24 @@ export default {
 	},
  mounted(){
 		this.loadingSidebar = true
-  getTypes().then(({data}) => {
+		var rol = 1
+  getTypes(rol,this.user.sucursal_id).then(({data}) => {
    this.types = data;
 			this.loadingSidebar = false
 			this.isLoading = false
   }).catch(error => {console.log(error);})
  },
 	methods: {
+		format(val){
+			var options = {
+				symbol : "$ ",
+				decimal : ",",
+				thousand: ".",
+				precision : 0,
+				format: "%s%v"
+			};
+			return accounting.formatMoney(val, options)
+		},
 		test(){
 			// testDetail().then(({data}) => {
 			// 	console.log(data);
@@ -162,6 +176,9 @@ export default {
 			this.type_selected_name = type.descripcion
 			this.isLoading = true
 			this.loadItems()
+		},
+		newFile(){
+			this.$router.push('/bill')
 		},
   onRowClick(params) {
 			// this.showActions = true

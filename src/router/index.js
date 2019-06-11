@@ -90,6 +90,7 @@ const router = new Router({
 			path: '/logout',
 			beforeEnter (to, from, next) {
 				removeToken()
+				removeUser()
 				auth.logout()
 				next({path:'/login'})
 			}

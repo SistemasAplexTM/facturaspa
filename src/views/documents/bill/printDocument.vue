@@ -9,7 +9,7 @@
           <th colspan="5" id="consecutivo_document"><span class="pull-right"></span></th>
       </tr>
       <tr>
-          <th id="data_title" class="title1" style="text-align: right">2019-03-19</th>
+          <th id="data_title" class="title1" style="text-align: right">{{ form_document.date }}</th>
           <th id="data_title" class="title2" style="color: #FCFCFC"></th>
           <th id="data_title" rowspan="3" class="title3">
               <div></div>
@@ -22,7 +22,7 @@
       </tr>
       <tr>
           <td id="data_title" rowspan="2" style="text-align: right;width: 168px;font-size: 10px;">
-              &nbsp;Duvier Marin Escobar<br>
+              &nbsp;{{ form_document.client_name }}<br>
               &nbsp;1112230018<br>
               &nbsp;3122414492<br>
               &nbsp;duvierm24@gmail.com<br>
@@ -49,14 +49,14 @@
                       </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="item in 9">
-                      <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">1</td>
+                    <tr v-for="item in table_detail">
+                      <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.cantidad }}</td>
                       <td id="table2" class="datos">100160162915</td>
-                      <td id="table2" class="datos">T SHIRT</td>
-                      <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">DIAMOND</td>
-                      <td id="table2" class="datos">$ 12,521.00 </td>
-                      <td id="table2" class="datos">- $ 0</td>
-                      <td id="table2" class="datos" style="text-align: right;padding-right: 3px;">$ 12,521.00</td>
+                      <td id="table2" class="datos">{{ item.categoria_id }}</td>
+                      <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.producto }}</td>
+                      <td id="table2" class="datos">{{ format(item.precio_venta) }}</td>
+                      <td id="table2" class="datos">- {{ format(item.descuento_venta) }}</td>
+                      <td id="table2" class="datos" style="text-align: right;padding-right: 3px;">{{ format((item.precio_venta * item.cantidad) - item.descuento_venta) }}</td>
                     </tr>
                   </tbody>
                   <!-- PIE DEL DOCUMENTO -->
@@ -65,31 +65,31 @@
                           <th id="table2" colspan="2" rowspan="3"><!--img--></th>
                           <th id="table2" colspan="3"><!--ROMOCIÓN NO TIENE CAMBIO--></th>
                           <th id="table2" style="text-align: right;"><!--SUBTOTAL--></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px; padding-top: 5px">$ 302.000</th>
+                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px; padding-top: 5px">{{ format(totals.subtotal_1) }}</th>
                       </tr>
                       <tr>
                           <th id="table2" colspan="3"><!--NO SE REALIZA REEMBOLSO--></th>
                           <th id="table2" style="text-align: right;"></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">$ 90.000</th>
+                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.iva) }}</th>
                       </tr>
                       <tr>
                           <th id="table2" colspan="3" rowspan="2" style="">
                               <!--LOS CAMBIOS SE REALIZAN EN UN PLAZO DE 15 DIAS, DE LUNES A VIERNES, RECUERDE PRESENTAR SU FACURA AL MOMENTO DE REALIZAR UN CAMBIO-->
                           </th>
                           <th id="table2" style="text-align: right;"><!--TOTAL--></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">$ 392.000</th>
+                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.subtotal_1 + totals.iva ) }}</th>
                       </tr>
                       <tr>
                           <th id="table2" colspan="2"><!--IVA REGIMEN COMUN--></th>
                           <th id="table2" style="text-align: right;"><!--DESCUENTO--></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">$ 0</th>
+                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.descuento_2) }}</th>
                       </tr>
                       <tr>
                           <th id="foot" style="">159364</th>
                           <th id="foot" style=""></th>
                           <th id="foot" style="" colspan="3"><!--GRACIAS POR SU COMPRA!--></th>
                           <th id="foot" style="text-align: right;"><!--TOTAL--></th>
-                          <th id="foot" style="text-align: right;padding-right: 3px;">$ 392.000</th>
+                          <th id="foot" style="text-align: right;padding-right: 3px;">{{ format(totals.total) }}</th>
                       </tr>
                   </tfoot>
               </table>
@@ -102,6 +102,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import accounting from 'accounting-js';
+
 export default {
   name: 'printDocument',
   data(){
@@ -110,11 +113,26 @@ export default {
     }
   },
   props: ['id_document'],
+  computed:{
+    ...mapGetters([
+      'totals', 'table_detail', 'form_document', 'wholesale'
+    ])
+  },
   methods:{
     print() {
       this.$emit('modalPrint')
       window.print()
     },
+    format(val){
+  			var options = {
+  				symbol : "$ ",
+  				decimal : ",",
+  				thousand: ".",
+  				precision : 0,
+  				format: "%s%v"
+  			};
+  			return accounting.formatMoney(val, options)
+  		},
   }
 }
 </script>

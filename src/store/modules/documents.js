@@ -80,6 +80,7 @@ const documents = {
 			// EL 19 DE IVA DEBE SER UNA VARIABLE QUE ESTE EN LA CONFIGURACION DEL DOCUMENTO
 			// iva 						= ((data == null || data == 'null') ? (Math.round(subtotal_2 * (19 / 100))) : iva)
 			// iva 						= (Math.round(subtotal_2 * (19 / 100)))
+			iva = (subtotal_1 - (descuento_1 + parseFloat(state.totals.descuento_2))) * 0.19
 			let total 			= parseFloat(subtotal_2 + iva + retefuente + reteica)
 			let neto 				= parseFloat(total) - parseFloat(state.totals.anticipo)
 			var obj = {
@@ -87,6 +88,7 @@ const documents = {
 				descuento_1: descuento_1,
 				descuento_2: parseFloat(state.totals.descuento_2),
 				subtotal_2: subtotal_2,
+				// iva: (subtotal_1 - (descuento_1 + parseFloat(state.totals.descuento_2))) * 0.19,
 				iva: iva,
 				retefuente:0,
 				reteica:0,
