@@ -43,7 +43,7 @@ import 'flag-icon-css/css/flag-icon.css'
 import '../node_modules/mdi/scss/materialdesignicons.scss'
 import Affix from './directives/affix'
 import App from './App.vue'
-import router from './router/'
+import router from './router'
 import store from './store'
 import i18n_messages from './i18n.json'
 
@@ -87,6 +87,17 @@ Vue.component('l-map', Vue2Leaflet.LMap)
 Vue.component('l-marker', Vue2Leaflet.LMarker)
 Vue.component('l-tile-layer', Vue2Leaflet.LTileLayer)
 const i18n = new VueI18n({ locale: 'us', messages:i18n_messages })
+
+import money from 'v-money'
+// register directive v-money and component <money>
+Vue.use(money, {
+  decimal: ',',
+  thousands: '.',
+  prefix: '$ ',
+  suffix: '',
+  precision: 0,
+  masked: false /* doesn't work with directive */
+})
 
 new Vue({
 	i18n,

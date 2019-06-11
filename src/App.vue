@@ -9,7 +9,7 @@
 		<transition name="fade">
 			<div class="splash-screen" v-if="splashScreen">
 				<div class="wrap">
-					<img src="/logo.svg" class="logo" alt="logo">
+					<img src="/logo_2.png" class="logo" alt="logo">
 					<img src="/Ripple-2s-200px.gif" alt="loading-image">
 				</div>
 			</div>
@@ -154,14 +154,14 @@ export default {
 			height: 60px;
 			margin-bottom: 20px;
 			margin-top: 10px;
-			margin-left: 30px;
-			margin-right: 30px;
+			margin-left: 0px;
+			margin-right: 0px;
 		}
 
 		.main {
 			position: relative;
 			overflow: hidden;
-			padding: 0 30px;
+			padding: 0 0px;
 		}
 
 		.view {

@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
-
-Vue.use(Vuex)
-
-const debug = process.env.NODE_ENV !== 'production'
-
-export default new Vuex.Store({
-	state: {
-		layout: {
+const app = {
+ state: {
+  money: {
+    decimal: ',',
+    thousands: '.',
+    prefix: '$ ',
+    suffix: '',
+    precision: 0,
+    masked: false /* doesn't work with directive */
+  },
+  layout: {
 			navPos: 'left', //top, bottom, left, right, false
 			toolbar: 'top', //top, bottom, false
 			footer: true, //above, below, false
@@ -17,10 +17,10 @@ export default new Vuex.Store({
 			viewAnimation: 'fade-top' // fade-left, fade-right, fade-top, fade-top-in-out, fade-bottom, fade-bottom-in-out, fade, false
 		},
 		splashScreen: true,
-		logged: true
-	},
-	mutations: {
-		setLayout(state, payload) {
+  logged: true
+  },
+  mutations: {
+  setLayout(state, payload) {
 			if(payload && payload.navPos !== undefined)
 				state.layout.navPos = payload.navPos
 
@@ -50,39 +50,10 @@ export default new Vuex.Store({
 		setSplashScreen(state, payload) {
 			state.splashScreen = payload
 		}
-	},
-	actions: {
-		
-	},
-	getters: {
-		layout(state, getters) {
-			return state.layout
-		},
-		navPos(state, getters) {
-			return state.layout.navPos
-		},
-		toolbar(state, getters) {
-			return state.layout.toolbar
-		},
-		footer(state, getters) {
-			return state.layout.footer
-		},
-		boxed(state, getters) {
-			return state.layout.boxed
-		},
-		roundedCorners(state, getters) {
-			return state.layout.roundedCorners
-		},
-		viewAnimation(state, getters) {
-			return state.layout.viewAnimation
-		},
-		isLogged(state, getters) {
-			return state.logged
-		},
-		splashScreen(state, getters) {
-			return state.splashScreen
-		}
-	},
-	plugins: [createPersistedState({paths: ['layout']})],
-	strict: debug
-})
+  },
+  actions: {
+
+  }
+}
+
+export default app

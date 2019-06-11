@@ -43,8 +43,8 @@ export default {
 	name: 'Login',
 	data() {
 		return {
-			email: '',
-			password: '',
+			email: 'admin@admin.com',
+			password: 'admin123',
 			loading: false,
 			error: false,
 			errorMsg: '',

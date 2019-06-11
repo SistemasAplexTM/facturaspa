@@ -53,10 +53,10 @@ export default {
 .vertical-nav {
 	//width: 230px;
 	height: 100%;
-	padding: 10px 20px;
+	padding: 10px 0px;
 	box-sizing: border-box;
 	transition: width .5s;
-	
+
 	.sidebar-mask {
 		visibility: hidden;
 		opacity: 0;
@@ -64,7 +64,7 @@ export default {
 	}
 
 	.sidebar {
-		width: 230px;
+		width: 190px;
 		height: 100%;
 		transition: width .5s;
 
@@ -81,14 +81,14 @@ export default {
 		&:not(.pos-right) {
 			.box-nav {
 				.scroll-nav {
-					&.vb { 
+					&.vb {
 						& > .vb-content {
 							margin-left: 4px;
 						}
-						& > .vb-dragger { 
-							//left: 3px; 
-							right: inherit; 
-						} 
+						& > .vb-dragger {
+							//left: 3px;
+							right: inherit;
+						}
 					}
 					.ps__scrollbar-y-rail {
 						left: 0px;
