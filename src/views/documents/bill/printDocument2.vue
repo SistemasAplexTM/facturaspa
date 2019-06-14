@@ -48,7 +48,7 @@
                           <th id="table2" width="17%">&nbsp;</th>
                       </tr>
                   </thead>
-                  <tbody style="min-height: 300px">
+                  <tbody>
                     <tr v-for="item in table_detail">
                       <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.cantidad }}</td>
                       <td id="table2" class="datos">100160162915</td>

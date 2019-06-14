@@ -34,22 +34,24 @@
 							:columns="columns"
 							:rows="rows"
 							:search-options="{
-					    enabled: true,
-								}"
+					    	enabled: true,
+								rigger: 'enter',
+								placeholder: 'Buscar',
+							}"
 							:pagination-options="{
-					    enabled: true,
-					    mode: 'Registros',
-					    perPage: 10,
-					    position: 'bottom',
-					    perPageDropdown: [10, 20, 30],
-					    dropdownAllowAll: false,
-					    nextLabel: 'Siguiente',
-					    prevLabel: 'Anterior',
-					    rowsPerPageLabel: 'Registros por página',
-					    ofLabel: 'de',
-					    pageLabel: 'Página', // for 'pages' mode
-					    allLabel: 'Todos',
-					  }"
+						    enabled: true,
+						    mode: 'Registros',
+						    perPage: 10,
+						    position: 'bottom',
+						    perPageDropdown: [10, 20, 30],
+						    dropdownAllowAll: false,
+						    nextLabel: 'Siguiente',
+						    prevLabel: 'Anterior',
+						    rowsPerPageLabel: 'Registros por página',
+						    ofLabel: 'de',
+						    pageLabel: 'Página', // for 'pages' mode
+						    allLabel: 'Todos',
+						  }"
 							:responsive="true"
 							:isLoading.sync="isLoading"
 							:fixed-header="true"
@@ -57,16 +59,16 @@
 							@on-row-click="onRowClick"
 							@on-selected-rows-change="selectionChanged"
 							@on-page-change="onPageChange"
-					  @on-sort-change="onSortChange"
-					  @on-filter="onColumnFilter"
-					  @on-per-page-change="onPerPageChange"
+						  @on-sort-change="onSortChange"
+						  @on-filter="onColumnFilter"
+						  @on-per-page-change="onPerPageChange"
 							:selectOptions="{
-					    enabled: true,
-					    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
-					    selectionInfoClass: 'custom-class',
-					    selectionText: 'rows selected',
-					    clearSelectionText: 'clear',
-					  }"
+						    enabled: true,
+						    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
+						    selectionInfoClass: 'custom-class',
+						    selectionText: 'rows selected',
+						    clearSelectionText: 'clear',
+						  }"
 							>
 						</vue-good-table>
 					</div>
@@ -133,15 +135,16 @@ export default {
 			rows: [],
 			totalRecords: 0,
 			serverParams: {
-    columnFilters: {
-    },
-    sort: {
-      field: 'consecutivo',
-      type: 'desc',
-    },
-    page: 0,
-    perPage: 10
-   },
+		    columnFilters: {
+					consecutivo: '40468',
+		    },
+		    sort: {
+		      field: 'consecutivo',
+		      type: 'desc',
+		    },
+		    page: 0,
+		    perPage: 10
+   		},
 			showActions: false,
 			types: []
 		}
@@ -178,48 +181,48 @@ export default {
 			this.loadItems()
 		},
 		newFile(){
-			this.$router.push('/bill')
+			this.$router.push('/bill/' + this.type_selected_name)
 		},
-  onRowClick(params) {
-			// this.showActions = true
-    console.log(params.row);
-  },
+	  onRowClick(params) {
+			this.$store.dispatch('editing_document', params.row.id)
+			this.$router.push('/bill/' + this.type_selected_name)
+	  },
 		selectionChanged(){
 			// alert('Hola')
 			this.showActions = true
 		},
 		updateParams(newProps) {
-    this.serverParams = Object.assign({}, this.serverParams, newProps);
-  },
-  onPageChange(params) {
-    this.updateParams({page: params.currentPage - 1});
-    this.loadItems();
-  },
-  onPerPageChange(params) {
-    this.updateParams({perPage: params.currentPerPage});
-    this.loadItems();
-  },
-  onSortChange(params) {
-   this.updateParams({
-    sort: {
-     type: params[0].type,
-     field: params[0].field,
-    },
-   });
-   this.loadItems();
-  },
-  onColumnFilter(params) {
-    this.updateParams(params);
-    this.loadItems();
-  },
-  loadItems() {
-			if (this.type_selected != null) {
-				getDocuments(this.type_selected, this.serverParams).then(({data}) => {
-					this.totalRecords = data.totalRecords;
-					this.rows = data.rows;
-				});
-			}
-  }
+	    this.serverParams = Object.assign({}, this.serverParams, newProps);
+	  },
+	  onPageChange(params) {
+	    this.updateParams({page: params.currentPage - 1});
+	    this.loadItems();
+	  },
+	  onPerPageChange(params) {
+	    this.updateParams({perPage: params.currentPerPage});
+	    this.loadItems();
+	  },
+	  onSortChange(params) {
+	   this.updateParams({
+	    sort: {
+	     type: params[0].type,
+	     field: params[0].field,
+	    },
+	   });
+	   this.loadItems();
+	  },
+	  onColumnFilter(params) {
+	    this.updateParams(params);
+	    this.loadItems();
+	  },
+	  loadItems() {
+				if (this.type_selected != null) {
+					getDocuments(this.type_selected, this.serverParams).then(({data}) => {
+						this.totalRecords = data.totalRecords;
+						this.rows = data.rows;
+					});
+				}
+	  }
 	}
 }
 </script>

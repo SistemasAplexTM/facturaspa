@@ -214,19 +214,23 @@
   </el-dialog>
 
  </div>
- <print-document v-else @modalPrint="printFinihs" :id_document="id_document"/>
+ <div v-else>
+   <print-document v-if="1 == 1" @modalPrint="printFinihs" :id_document="id_document"/>
+   <print-document-2 v-else @modalPrint="printFinihs" :id_document="id_document"/>
+ </div>
 </template>
 
 <script>
 import FormDocument from './Form'
 import ListDocuments from './List'
 import PrintDocument from './printDocument'
+import PrintDocument2 from './printDocument2'
 import accounting from 'accounting-js'
 import { save, update, savePaymentMethod, validateCashRegister, saveCashRegister } from '@/api/document/document'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    FormDocument, ListDocuments, PrintDocument
+    FormDocument, ListDocuments, PrintDocument, PrintDocument2
   },
   data(){
   	return {

@@ -1,4 +1,4 @@
-import { documentById } from '@/api/document'
+import { documentById } from '@/api/document/document'
 
 const documents = {
 	state: {

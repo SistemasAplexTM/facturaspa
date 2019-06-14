@@ -82,14 +82,14 @@
 
 	export default {
 		data(){
-		  	return {
-		  		tableData: [],
-		  		total_monto: 0,
-					wholesale: false,
-					bar_code: null,
-					cellar: null,
-					loading: false
-		  	}
+	  	return {
+	  		tableData: [],
+	  		total_monto: 0,
+				wholesale: false,
+				bar_code: null,
+				cellar: null,
+				loading: false
+	  	}
 		},
 		computed:{
 			...mapGetters(['table_detail'])
@@ -168,9 +168,9 @@
 							message: data.msg
 						});
 					}
-    }).catch(error => {
-     	console.log(error)
-						this.loading = false
+    	}).catch(error => {
+     		console.log(error)
+				this.loading = false
    		});
 			},
 			calculateMonto(index, cantidad){
@@ -190,9 +190,9 @@
 						precio = this.tableData[index].precio_pormayor;
 						desto = this.tableData[index].descuento_pormayor;
 					}
+					console.log('desto: ', desto);
 					desto = (desto * cantidad)
 					this.tableData[index].descuento = desto
-
 					this.tableData[index].iva = Math.round(((precio * cantidad) - desto)  * this.tableData[index].porcentaje_iva / 100, 0)
 					// this.tableData[index].monto_total = (precio * cantidad) - parseFloat(this.tableData[index].descuento) + parseFloat(this.tableData[index].iva)
 					this.tableData[index].monto_total = (precio * cantidad) - parseFloat(desto) + parseFloat(this.tableData[index].iva)

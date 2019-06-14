@@ -21,7 +21,7 @@ export default {
     }
    },
    {
-    path: '/bill',
+    path: '/bill/:name',
     name: 'Factura',
     component: Bill,
     meta: {

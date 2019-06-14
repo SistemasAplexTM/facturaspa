@@ -265,7 +265,7 @@ export default {
 		getDescription(){
 			// var data = JSON.parse(localStorage.getItem('setup'));
 			// return data.type.descripcion
-			return 'Hola'
+			return this.$route.params.name
 		},
 		resetForm(){
 			this.form = {}
