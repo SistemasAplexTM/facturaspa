@@ -19,6 +19,7 @@ import store from '../store'
 
 import reports from './modules/reports'
 import documents from './modules/documents'
+import Bill from '../views/documents/bill/Index.vue'
 
 Vue.use(Router)
 
@@ -29,8 +30,8 @@ const router = new Router({
 		{
 			path: '/',
 			alias: '/dashboard',
-			name: 'dashboard',
-			component: Dashboard,
+			name: 'Inicio',
+			component: Bill,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
@@ -147,7 +148,7 @@ router.beforeEach((to, from, next) => {
 	if(authrequired) {
 		if(auth.loggedIn()) {
 			if(to.name === 'login') {
-				window.location.href = '/'
+				window.location.href = '/bill/Factura de Venta'
 				return false
 			} else {
 				next()
@@ -161,7 +162,7 @@ router.beforeEach((to, from, next) => {
 		}
 	} else {
 		if(auth.loggedIn() && to.name === 'login'){
-			window.location.href = '/'
+			window.location.href = '/bill/Factura de Venta'
 			return false
 		} else {
 			next()

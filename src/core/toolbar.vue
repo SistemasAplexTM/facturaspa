@@ -5,19 +5,19 @@
 				<i class="mdi mdi-menu"></i>
 			</button>
 
-			<search class="hidden-xs-only"></search>
+			<!-- <search class="hidden-xs-only"></search> -->
 		</div>
 		<div class="box-right flex align-center pl-10">
 			<button class="fullscreen-button" @click="toggleFullscreen">
 				<i class="mdi mdi-fullscreen" v-if="!fullscreen"></i>
 				<i class="mdi mdi-fullscreen-exit" v-if="fullscreen"></i>
 			</button>
-			<el-popover ref="popover" placement="bottom" :width="popoverWidth" trigger="click">
+			<!-- <el-popover ref="popover" placement="bottom" :width="popoverWidth" trigger="click">
 				<notification-box></notification-box>
 			</el-popover>
 			<el-badge :is-dot="true" class="notification-icon-badge">
 				<el-button v-popover:popover icon="mdi mdi-bell" class="notification-icon"></el-button>
-			</el-badge>
+			</el-badge> -->
 			<span class="username">
 				<!-- <router-link to="/profile"> -->
 					{{ user.name }}

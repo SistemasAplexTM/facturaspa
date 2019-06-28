@@ -1,4 +1,5 @@
 import { documentById } from '@/api/document/document'
+import { roundToTheNearestAnything } from '@/utils/number'
 
 const documents = {
 	state: {
@@ -20,6 +21,7 @@ const documents = {
 		wholesale: false,
 		form_document: {},
 		table_detail: [],
+		payment_methods: [],
 		list: false,
 	},
 	mutations:{
@@ -44,11 +46,17 @@ const documents = {
 		SET_FORM_DOCUMENT:(state, form) => {
 			state.form_document = form
 		},
+		SET_FORM_DOCUMENT_CONSECUTIVE:(state, consecutive) => {
+			state.form_document.consecutive = consecutive
+		},
 		SET_RECEIVED:(state, val) => {
 			state.totals.recibido = val
 		},
 		SET_RETURN:(state, val) => {
 			state.totals.devolucion = val
+		},
+		SET_PAYMENT_METHODS:(state, val) => {
+			state.payment_methods = val
 		},
 		SET_LIST:(state, val) => {
 			state.list = val
@@ -82,7 +90,9 @@ const documents = {
 			// iva 						= (Math.round(subtotal_2 * (19 / 100)))
 			iva = (subtotal_1 - (descuento_1 + parseFloat(state.totals.descuento_2))) * 0.19
 			let total 			= parseFloat(subtotal_2 + iva + retefuente + reteica)
+			total = roundToTheNearestAnything(total, 10)
 			let neto 				= parseFloat(total) - parseFloat(state.totals.anticipo)
+			neto = roundToTheNearestAnything(neto, 10)
 			var obj = {
 				subtotal_1: subtotal_1,
 				descuento_1: descuento_1,
@@ -118,6 +128,7 @@ const documents = {
 			commit('SET_TOTALS', obj)
 		},
 		defaultAll({ commit, dispatch  }){
+			commit('SET_PAYMENT_METHODS', [])
 			commit('SET_TABLE_DETAIL', [])
 			commit('SET_FORM_DOCUMENT', {})
 			dispatch('defaultTotals')

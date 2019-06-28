@@ -135,13 +135,14 @@ export default {
   data(){
   	return {
   		form: {
+  			consecutive: null,
   			date: null,
-        client_id: null,
-        client_name: null,
-        days: 0,
-        date_receip: null,
-        seller_id: null,
-        observation: null,
+     client_id: null,
+     client_name: null,
+     days: 0,
+     date_receip: null,
+     seller_id: null,
+     observation: null,
   		},
 			result: [],
 			resultSeller: [],
@@ -178,20 +179,26 @@ export default {
 		}
 	},
 	mounted(){
-		this.form.date = new Date();
-		this.form.date_receip = new Date();
+		this.form.date = this.getDate()
+		this.form.date_receip = this.getDate();
 	},
  methods:{
+		getDate(){
+			var f = new Date()
+			return f.getFullYear() + "-" + (f.getMonth() +1) + "-" + f.getDate()
+		},
 		setDataDocument(data){
+			this.$store.commit('SET_PAYMENT_METHODS', data.payment)
 			this.$store.commit('SET_WHOLESALE', data.document.pormayor)
 			this.$store.commit('SET_TABLE_DETAIL', data.detail)
-			let date = new Date(data.document.fecha)
-			date.setDate(date.getDate() + 1)
-			this.form.date = date
+			this.form.date = data.document.fecha
+			this.form.consecutive = data.document.consecutivo
 			if(data.client != null){
+				this.form.client = data.client
 				this.handleSelect(data.client)
 			}
 			if(data.seller != null){
+				this.form.seller = data.seller.nombre
 				this.handleSelectSeller(data.seller)
 			}
 			this.form.days = data.document.dias
@@ -228,13 +235,13 @@ export default {
 				'month': month
 			}
 		},
-	 	querySearch(queryString, cb) {
-			searchPeople(queryString, 'cliente').then(({data}) => {
+ 	querySearch(queryString, cb) {
+		searchPeople(queryString, 'cliente').then(({data}) => {
 					cb(data.data);
 			}).catch( error => { console.log(error) })
 		},
-	 	querySearchSeller(queryString, cb) {
-			searchPeople(queryString, 'vendedor').then(({data}) => {
+ 	querySearchSeller(queryString, cb) {
+		searchPeople(queryString, 'vendedor').then(({data}) => {
 					cb(data.data);
 			}).catch( error => { console.log(error) })
 		},
@@ -247,6 +254,7 @@ export default {
 			this.client.phone = item.telefono
 			this.form.client_id = item.id
 			this.form.client_name = item.nombre
+			this.form.client = item
 		},
 		handleIconClick(ev) {
 			console.log(ev);
@@ -257,7 +265,7 @@ export default {
 				return false
 			}
 			this.seller = item.nombre
-			this.form.seller_id = item.id
+			this.form.seller_id = (item.id_vendedor) ? item.id_vendedor : item.id
 		},
 		handleIconClickSeller(ev) {
 			console.log(ev);

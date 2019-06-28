@@ -22,15 +22,15 @@
       </tr>
       <tr>
           <td id="data_title" rowspan="2" style="text-align: right;width: 168px;font-size: 10px;">
-              &nbsp;{{ form_document.client_name }}<br>
-              &nbsp;1112230018<br>
-              &nbsp;3122414492<br>
-              &nbsp;duvierm24@gmail.com<br>
+              &nbsp;{{ form_document.client.nombre }}<br>
+              &nbsp;{{ form_document.client.documento }}<br>
+              &nbsp;{{ form_document.client.telefono }}<br>
+              &nbsp;{{ form_document.client.email }}<br>
           </td>
-          <th id="data_title">Efectivo</th>
+          <!-- <th id="data_title">{{ payment_methods_print() }}</th> -->
       </tr>
       <tr>
-          <td id="data_client"><br><br>Jhonny Roba Kills</td>
+          <td id="data_client"><br><br>{{ form_document.seller }}</td>
       </tr>
       <tr><td id="table2" colspan="5" style="">&nbsp;</td></tr>
       <!-- DETALLE DEL DOCUMENTO -->
@@ -51,8 +51,8 @@
                   <tbody style="min-height: 300px">
                     <tr v-for="item in table_detail">
                       <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.cantidad }}</td>
-                      <td id="table2" class="datos">100160162915</td>
-                      <td id="table2" class="datos">{{ item.categoria_id }}</td>
+                      <td id="table2" class="datos">{{ (item.codigo) ? item.codigo : item.product.codigo }}</td>
+                      <td id="table2" class="datos">{{ (item.category) ? item.category.descripcion : item.product.category.descripcion }}</td>
                       <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.producto }}</td>
                       <td id="table2" class="datos">{{ format(item.precio_venta) }}</td>
                       <td id="table2" class="datos">- {{ format(item.descuento_venta) }}</td>
@@ -85,7 +85,7 @@
                           <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.descuento_2) }}</th>
                       </tr>
                       <tr>
-                          <th id="foot" style="">159364</th>
+                          <th id="foot" style=""></th>
                           <th id="foot" style=""></th>
                           <th id="foot" style="" colspan="3"><!--GRACIAS POR SU COMPRA!--></th>
                           <th id="foot" style="text-align: right;"><!--TOTAL--></th>
@@ -115,7 +115,7 @@ export default {
   props: ['id_document'],
   computed:{
     ...mapGetters([
-      'totals', 'table_detail', 'form_document', 'wholesale'
+      'totals', 'table_detail', 'form_document', 'wholesale', 'payment_methods'
     ])
   },
   methods:{
@@ -133,6 +133,13 @@ export default {
   			};
   			return accounting.formatMoney(val, options)
   		},
+    payment_methods_print(){
+     var result = ''
+     for (var i = 0; i < this.payment_methods.length; i++) {
+      result += this.payment_methods[i].payment_form.descripcion + ','
+     }
+     return result
+    }
   }
 }
 </script>

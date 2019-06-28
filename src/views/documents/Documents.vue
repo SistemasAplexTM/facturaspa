@@ -1,5 +1,5 @@
 <template>
-	<div class="page-layout-sidebar-left" style="max-width: 100%">
+	<div  v-if="!modalPrint" class="page-layout-sidebar-left" style="max-width: 100%">
 		<div class="page-header header-primary card-shadow--small flex p-5 br-5">
 			<div class="box grow">
 				<h1>{{ user.branch.razon_social }}</h1>
@@ -14,9 +14,8 @@
 				</ul>
 			</div>
 			<div v-if="type_selected_name != 'Tipo de documento'" class="box grow card-base card-shadow--small p-30 scrollable only-y">
-				<!-- <h2 class="mt-8 text-center">Factura de venta</h2> -->
 				<div class="bb mb-10 pb-15 text-center">
-					<el-button icon="el-icon-plus" type="success" size="small" class="fl" @click="newFile">Nuevo</el-button>
+					<!-- <el-button icon="el-icon-plus" type="success" size="small" class="fl" @click="newFile">Nuevo</el-button> -->
 					<h2 class="" style="display:inline">{{ type_selected_name }}</h2>
 					<transition name="fade">
 						<div class="fr" v-show="showActions">
@@ -34,24 +33,24 @@
 							:columns="columns"
 							:rows="rows"
 							:search-options="{
-					    	enabled: true,
+			    	enabled: true,
 								rigger: 'enter',
 								placeholder: 'Buscar',
 							}"
 							:pagination-options="{
-						    enabled: true,
-						    mode: 'Registros',
-						    perPage: 10,
-						    position: 'bottom',
-						    perPageDropdown: [10, 20, 30],
-						    dropdownAllowAll: false,
-						    nextLabel: 'Siguiente',
-						    prevLabel: 'Anterior',
-						    rowsPerPageLabel: 'Registros por página',
-						    ofLabel: 'de',
-						    pageLabel: 'Página', // for 'pages' mode
-						    allLabel: 'Todos',
-						  }"
+					    enabled: true,
+					    mode: 'Registros',
+					    perPage: 10,
+					    position: 'bottom',
+					    perPageDropdown: [10, 20, 30],
+					    dropdownAllowAll: false,
+					    nextLabel: 'Siguiente',
+					    prevLabel: 'Anterior',
+					    rowsPerPageLabel: 'Registros por página',
+					    ofLabel: 'de',
+					    pageLabel: 'Página', // for 'pages' mode
+					    allLabel: 'Todos',
+					  }"
 							:responsive="true"
 							:isLoading.sync="isLoading"
 							:fixed-header="true"
@@ -59,17 +58,24 @@
 							@on-row-click="onRowClick"
 							@on-selected-rows-change="selectionChanged"
 							@on-page-change="onPageChange"
-						  @on-sort-change="onSortChange"
-						  @on-filter="onColumnFilter"
-						  @on-per-page-change="onPerPageChange"
-							:selectOptions="{
-						    enabled: true,
-						    selectOnCheckboxOnly: true, // only select when checkbox is clicked instead of the row
-						    selectionInfoClass: 'custom-class',
-						    selectionText: 'rows selected',
-						    clearSelectionText: 'clear',
-						  }"
+					  @on-sort-change="onSortChange"
+					  @on-filter="onColumnFilter"
+					  @on-per-page-change="onPerPageChange"
 							>
+							<template slot="table-row" slot-scope="props">
+									<span v-if="props.column.field == 'actions'">
+										<el-tooltip content="Sin formato" placement="top">
+											<el-button @click="printDocument(1)" size="small" icon="el-icon-printer" title="Sin formato"></el-button>
+									</el-tooltip>
+										<el-tooltip content="Con membrete" placement="top">
+											<el-button @click="printDocument(2)" type="primary" size="small" icon="el-icon-printer" title="Con membrete"></el-button>
+									</el-tooltip>
+											<!-- <span style="font-weight: bold; color: blue;">{{props.row.id}}</span> -->
+									</span>
+									<span v-else>
+											{{props.formattedRow[props.column.field]}}
+									</span>
+							</template>
 						</vue-good-table>
 					</div>
 				</div>
@@ -83,14 +89,22 @@
 			</div>
 		</div>
 	</div>
+	<div v-else>
+   <print-document v-if="!modalPrint2" @modalPrint="printFinihs" :id_document="id_document"/>
+   <print-document-2 v-else @modalPrint="printFinihs" :id_document="id_document"/>
+ </div>
 </template>
 
 <script>
 import accounting from 'accounting-js';
 import { getUser } from '@/utils/auth'
 import { getTypes, getDocuments } from '@/api/document'
+import PrintDocument from './bill/printDocument'
+import PrintDocument2 from './bill/printDocument2'
+
 export default {
 	name: 'LayoutSidebarLeft',
+	components: { PrintDocument, PrintDocument2 },
 	data() {
 		return {
 			user: getUser(),
@@ -127,8 +141,14 @@ export default {
 				},
 				{
 					label: 'Recibido',
-					field: 'id',
+					field: 'payment_detail.0.valor',
 					formatFn: this.format,
+					width: '100px',
+				},
+				{
+					label: 'Acciones',
+					field: 'actions',
+					html: true,
 					width: '100px',
 				},
 			],
@@ -146,7 +166,10 @@ export default {
 		    perPage: 10
    		},
 			showActions: false,
-			types: []
+			types: [],
+			modalPrint: false,
+			modalPrint2: false,
+			id_document: null
 		}
 	},
  mounted(){
@@ -156,6 +179,8 @@ export default {
    this.types = data;
 			this.loadingSidebar = false
 			this.isLoading = false
+			this.selectType(data[0].type)
+
   }).catch(error => {console.log(error);})
  },
 	methods: {
@@ -183,46 +208,55 @@ export default {
 		newFile(){
 			this.$router.push('/bill/' + this.type_selected_name)
 		},
-	  onRowClick(params) {
-			this.$store.dispatch('editing_document', params.row.id)
-			this.$router.push('/bill/' + this.type_selected_name)
-	  },
+	 onRowClick(params) {
+			// this.$store.dispatch('editing_document', params.row.id)
+			// this.$router.push('/bill/' + this.type_selected_name)
+	 },
 		selectionChanged(){
 			// alert('Hola')
 			this.showActions = true
 		},
 		updateParams(newProps) {
-	    this.serverParams = Object.assign({}, this.serverParams, newProps);
-	  },
-	  onPageChange(params) {
-	    this.updateParams({page: params.currentPage - 1});
-	    this.loadItems();
-	  },
-	  onPerPageChange(params) {
-	    this.updateParams({perPage: params.currentPerPage});
-	    this.loadItems();
-	  },
-	  onSortChange(params) {
-	   this.updateParams({
-	    sort: {
-	     type: params[0].type,
-	     field: params[0].field,
-	    },
-	   });
-	   this.loadItems();
-	  },
-	  onColumnFilter(params) {
-	    this.updateParams(params);
-	    this.loadItems();
-	  },
-	  loadItems() {
-				if (this.type_selected != null) {
-					getDocuments(this.type_selected, this.serverParams).then(({data}) => {
-						this.totalRecords = data.totalRecords;
-						this.rows = data.rows;
-					});
-				}
-	  }
+    this.serverParams = Object.assign({}, this.serverParams, newProps);
+  },
+  onPageChange(params) {
+    this.updateParams({page: params.currentPage - 1});
+    this.loadItems();
+  },
+  onPerPageChange(params) {
+    this.updateParams({perPage: params.currentPerPage});
+    this.loadItems();
+  },
+  onSortChange(params) {
+   this.updateParams({
+    sort: {
+     type: params[0].type,
+     field: params[0].field,
+    },
+   });
+   this.loadItems();
+  },
+  onColumnFilter(params) {
+    this.updateParams(params);
+    this.loadItems();
+  },
+  loadItems() {
+			if (this.type_selected != null) {
+				getDocuments(this.type_selected, this.serverParams).then(({data}) => {
+					this.totalRecords = data.totalRecords;
+					this.rows = data.rows;
+				});
+			}
+  },
+		printDocument(format){
+			this.modalPrint = true
+			if (format == 2) {
+				this.modalPrint2 = true
+			}
+		},
+		printFinihs(){
+			alert('Finish')
+		}
 	}
 }
 </script>

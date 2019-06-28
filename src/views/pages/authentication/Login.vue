@@ -56,7 +56,7 @@ export default {
 			login(this.email, this.password, false).then(({data}) => {
 				if (data.code === 200) {
 				 this.$store.commit('setLogin')
-	    this.$router.push({ path: '/' })
+	    this.$router.push({ path: '/bill/Factura de Venta' })
 				 setToken(data.access_token)
 				 setUser(data.user)
 				}else {

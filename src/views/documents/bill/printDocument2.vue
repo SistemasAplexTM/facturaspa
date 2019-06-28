@@ -3,101 +3,131 @@
     <div class="print-toolbar">
       <el-button icon="el-icon-printer" @click="print">Imprimir</el-button>
     </div>
+    <div style="" id="page-wrapper">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" id="factura" style="text-align:center; padding: 10px 0px;">
+<!--            <tr>
+                <th colspan="5" id="title_document">jhonny</th>
+            </tr>-->
+            <!-- <tr>
+                <th colspan="5" id="consecutivo_document"><span class="pull-right">CONSECUTIVO</span></th>
+            </tr> -->
+            <tr>
+                <th id="data_title">FECHA</th>
+                <th id="data_title">{{ form_document.consecutive }}</th>
+                <th id="data_title" rowspan="3">
+                    <div>Telefono</div>
+                    <div><img id="img_redes" src="@/assets/images/wa_xplod.png"></div>
+                </th>
+                <th id="data_title" rowspan="3">
+                    <div>XPLOD.NY</div>
+                    <div><img id="img_redes" src="@/assets/images/igxplod.png"></div>
+                </th>
+                <th id="data_title" rowspan="3">
+                    <div>XPLOD.NY</div>
+                    <div><img id="img_redes" src="@/assets/images/face_xplod.png"></div>
+                </th>
+            </tr>
+            <tr>
+                <td id="data_title" rowspan="2">{{ form_document.date }}</td>
+                <th id="data_title">Medio de pago</th>
+            </tr>
+            <tr>
+                <td id="data_title">
+                 {{ payment_methods_print() }}
+                </td>
+            </tr>
+            <!-- DATOS DEL CLIENTE -->
+            <tr>
+                <th id="data_client">NOMBRE</th>
+                <td id="data_client" colspan="2" style="text-align: left;padding-left: 3px;">{{ form_document.client.nombre }}</td>
+                <th id="data_client">DOCUMENTO</th>
+                <td id="data_client" style="text-align: left;padding-left: 3px;">{{ form_document.client.documento }}</td>
+            </tr>
+            <tr>
+                <th id="data_client">CORREO</th>
+                <td id="data_client" colspan="2" style="text-align: left;padding-left: 3px;">{{ form_document.client.email }}</td>
+                <th id="data_client">TELÉFONO</th>
+                <td id="data_client" style="text-align: left;padding-left: 3px;">{{ form_document.client.telefono }}</td>
+            </tr>
+            <tr><td id="table2" colspan="5" style="background-color: #c1c1c1">&nbsp;</td></tr>
+            <!-- DETALLE DEL DOCUMENTO -->
+            <tr>
+                <td colspan="5">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                        <thead>
+                            <tr>
+                                <th id="table2" width="5%">CANT</th>
+                                <th id="table2" width="13%">CÓDIGO</th>
+                                <th id="table2" width="14%">CATEGORIA</th>
+                                <th id="table2" width="25%">DESCRIPCIÓN</th>
+                                <th id="table2" width="14%">V. UNIT</th>
+                                <th id="table2" width="14%">DESC. UNIT</th>
+                                <th id="table2" width="15%">V. TOTAL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                               <tr v-for="item in table_detail">
+                                    <td id="table2">{{ item.cantidad }}</td>
+                                    <td id="table2">{{ (item.codigo) ? item.codigo : item.product.codigo }}</td>
+                                    <td id="table2">{{ (item.category) ? item.category.descripcion : item.product.category.descripcion }}</td>
+                                    <td id="table2" style="text-align: left;padding-left: 3px;">{{ item.producto }}</td>
+                                    <td id="table2">{{ format(item.precio_venta) }}</td>
+                                    <td id="table2">- {{ format(item.descuento_venta) }}</td>
+                                    <td id="table2" style="text-align: right;padding-right: 3px;">{{ format((item.precio_venta * item.cantidad) - item.descuento_venta) }}</td>
+                                </tr>
+                                <tr v-for="tales in (9 - table_detail.length)">
+                                    <td id="table2">&nbsp;</td>
+                                    <td id="table2">&nbsp;</td>
+                                    <td id="table2">&nbsp;</td>
+                                    <td id="table2">&nbsp;</td>
+                                    <td id="table2">&nbsp;</td>
+                                    <td id="table2">&nbsp;</td>
+                                    <td id="table2">&nbsp;</td>
+                                </tr>
+                            <tr>
+                                <td id="table2" colspan="7" style="background-color: #c1c1c1">&nbsp;</td>
+                            </tr>
+                        </tbody>
+                        <!-- PIE DEL DOCUMENTO -->
+                        <tfoot>
+                            <tr>
+                                <th id="table2" colspan="2" rowspan="3"><img style="" id="logo" src="@/assets/images/Infashion.png"></th>
+                                <th id="table2" colspan="3">PROMOCIÓN NO TIENE CAMBIO</th>
+                                <th id="table2" style="text-align: right;">SUBTOTAL</th>
+                                <th id="table2" style="text-align: right;padding-right: 3px;">{{ format(totals.subtotal_1) }}</th>
+                            </tr>
+                            <tr>
+                                <th id="table2" colspan="3">NO SE REALIZA REEMBOLSO </th>
+                                <th id="table2" style="text-align: right;">IVA</th>
+                                <th id="table2" style="text-align: right;padding-right: 3px;">{{ format(totals.iva) }}</th>
+                            </tr>
+                            <tr>
+                                <th id="table2" colspan="3" rowspan="2">
+                                    LOS CAMBIOS SE REALIZAN EN UN PLAZO DE 15 DIAS, DE LUNES A VIERNES, RECUERDE PRESENTAR SU FACURA AL MOMENTO DE REALIZAR UN CAMBIO
+                                </th>
+                                <th id="table2" style="text-align: right;">TOTAL</th>
+                                <th id="table2" style="text-align: right;padding-right: 3px;">{{ format(totals.subtotal_1 + totals.iva ) }}</th>
+                            </tr>
+                            <tr>
+                                <th id="table2" colspan="2">IVA REGIMEN COMUN</th>
+                                <th id="table2" style="text-align: right;">DESCUENTO</th>
+                                <th id="table2" style="text-align: right;padding-right: 3px;">{{ format(totals.descuento_2) }}</th>
+                            </tr>
+                            <tr>
+                                <th id="foot" style="background-color: #c1c1c1;">ASESOR</th>
+                                <th id="foot" style="background-color: #c1c1c1;">{{ form_document.seller }}</th>
+                                <th id="foot" style="background-color: #c1c1c1;" colspan="3">GRACIAS POR SU COMPRA!</th>
+                                <th id="foot" style="text-align: right;background-color: #c1c1c1;">TOTAL</th>
+                                <th id="foot" style="text-align: right;padding-right: 3px;background-color: #c1c1c1;">{{ format(totals.total) }}</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </td>
+            </tr>
 
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="factura" style="text-align:center; padding: 10px 0px;">
-      <tr>
-          <th colspan="5" id="consecutivo_document"><span class="pull-right"></span></th>
-      </tr>
-      <tr>
-          <th id="data_title" class="title1" style="text-align: right">{{ form_document.date }}</th>
-          <th id="data_title" class="title2" style="color: #FCFCFC"></th>
-          <th id="data_title" rowspan="3" class="title3">
-              <div></div>
-              <div><!--img--></div>
-          </th>
-          <div>&nbsp;</div>
-          <th id="data_title" rowspan="3" class="title3">
-              <div><!--img--></div>
-          </th>
-      </tr>
-      <tr>
-          <td id="data_title" rowspan="2" style="text-align: right;width: 168px;font-size: 10px;">
-              &nbsp;{{ form_document.client_name }}<br>
-              &nbsp;1112230018<br>
-              &nbsp;3122414492<br>
-              &nbsp;duvierm24@gmail.com<br>
-          </td>
-          <th id="data_title">Efectivo</th>
-      </tr>
-      <tr>
-          <td id="data_client"><br><br>Jhonny Roba Kills</td>
-      </tr>
-      <tr><td id="table2" colspan="5" style="">&nbsp;</td></tr>
-      <!-- DETALLE DEL DOCUMENTO -->
-      <tr>
-          <td colspan="5">
-              <table width="100%" border="0" cellspacing="0" cellpadding="0"draggable="">
-                  <thead>
-                      <tr>
-                          <th id="table2" width="7%" style="font-size: 23px;">&nbsp;</th>
-                          <th id="table2" width="13%">&nbsp;</th>
-                          <th id="table2" width="14%">&nbsp;</th>
-                          <th id="table2" width="25%">&nbsp;</th>
-                          <th id="table2" width="14%">&nbsp;</th>
-                          <th id="table2" width="14%">&nbsp;</th>
-                          <th id="table2" width="17%">&nbsp;</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in table_detail">
-                      <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.cantidad }}</td>
-                      <td id="table2" class="datos">100160162915</td>
-                      <td id="table2" class="datos">{{ item.categoria_id }}</td>
-                      <td id="table2" class="datos" style="text-align: left;padding-left: 3px;">{{ item.producto }}</td>
-                      <td id="table2" class="datos">{{ format(item.precio_venta) }}</td>
-                      <td id="table2" class="datos">- {{ format(item.descuento_venta) }}</td>
-                      <td id="table2" class="datos" style="text-align: right;padding-right: 3px;">{{ format((item.precio_venta * item.cantidad) - item.descuento_venta) }}</td>
-                    </tr>
-                  </tbody>
-                  <!-- PIE DEL DOCUMENTO -->
-                  <tfoot >
-                      <tr>
-                          <th id="table2" colspan="2" rowspan="3"><!--img--></th>
-                          <th id="table2" colspan="3"><!--ROMOCIÓN NO TIENE CAMBIO--></th>
-                          <th id="table2" style="text-align: right;"><!--SUBTOTAL--></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px; padding-top: 5px">{{ format(totals.subtotal_1) }}</th>
-                      </tr>
-                      <tr>
-                          <th id="table2" colspan="3"><!--NO SE REALIZA REEMBOLSO--></th>
-                          <th id="table2" style="text-align: right;"></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.iva) }}</th>
-                      </tr>
-                      <tr>
-                          <th id="table2" colspan="3" rowspan="2" style="">
-                              <!--LOS CAMBIOS SE REALIZAN EN UN PLAZO DE 15 DIAS, DE LUNES A VIERNES, RECUERDE PRESENTAR SU FACURA AL MOMENTO DE REALIZAR UN CAMBIO-->
-                          </th>
-                          <th id="table2" style="text-align: right;"><!--TOTAL--></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.subtotal_1 + totals.iva ) }}</th>
-                      </tr>
-                      <tr>
-                          <th id="table2" colspan="2"><!--IVA REGIMEN COMUN--></th>
-                          <th id="table2" style="text-align: right;"><!--DESCUENTO--></th>
-                          <th id="table2" style="text-align: right;padding-right: 3px;font-size: 11px;">{{ format(totals.descuento_2) }}</th>
-                      </tr>
-                      <tr>
-                          <th id="foot" style="">159364</th>
-                          <th id="foot" style=""></th>
-                          <th id="foot" style="" colspan="3"><!--GRACIAS POR SU COMPRA!--></th>
-                          <th id="foot" style="text-align: right;"><!--TOTAL--></th>
-                          <th id="foot" style="text-align: right;padding-right: 3px;">{{ format(totals.total) }}</th>
-                      </tr>
-                  </tfoot>
-              </table>
-          </td>
-      </tr>
+        </table>
 
-  </table>
-
+    </div>
   </div>
 </template>
 
@@ -115,7 +145,7 @@ export default {
   props: ['id_document'],
   computed:{
     ...mapGetters([
-      'totals', 'table_detail', 'form_document', 'wholesale'
+      'totals', 'table_detail', 'form_document', 'payment_methods', 'wholesale'
     ])
   },
   methods:{
@@ -133,6 +163,13 @@ export default {
   			};
   			return accounting.formatMoney(val, options)
   		},
+    payment_methods_print(){
+     var result = ''
+     for (var i = 0; i < this.payment_methods.length; i++) {
+      result += this.payment_methods[i].payment_form.descripcion + ','
+     }
+     return result
+    }
   }
 }
 </script>
@@ -140,33 +177,41 @@ export default {
 <style lang="scss" scoped>
 
   *{
-      font-size: 12px;
+    font-size: 12px;
+    color: black;
   }
   table{
     margin-top: 10px;
-    background-color: white;
+    // background-color: white;
   }
+  tr {
+    border: solid 1px black;
+  }
+  td{
+   border: solid 1px black;
+  }
+
   #title_document{
       font-size: 20px;
-      border-bottom: 1px solid #FFF;
+      border-bottom: 1px solid black;
   }
   #data_title{
-      border: 1px solid #FFF;
+      border: 1px solid black;
       /*border: 1px solid #c1c1c1;*/
   }
   #data_client{
-      border: 1px solid #FFF;
+      border: 1px solid black;
   }
   #foot{
-      background-color: #FFF;
-      border: 1px solid #FFF;
+      background-color: black;
+      border: 1px solid black;
   }
   #logo{
       width: 100px;
       height: 50px;
   }
   #table2{
-      border: 1px solid #FFF;
+      // border: 1px solid black;
   }
   #img_redes{
       height: 15px;

@@ -11,11 +11,13 @@
 				</el-input>
 			</el-col>
 			<el-col :span="6" class="labelOff">
-					<el-switch v-model="wholesale" inactive-text="Normal" active-text="Por mayor" @change="updateValueDetail()"></el-switch>
+					<el-switch v-model="wholesale" inactive-text="Normal" active-text="Por mayor" @change="updateValueDetail()" :disabled="disabledWholesale"></el-switch>
 			</el-col>
 		</el-row>
 
-		<el-table :data="tableData" style="width: 100%">
+		<div class="flex">
+			<div class="scrollable only-y w-100">
+				<el-table :data="tableData" class="w-100" height="400">
 		    <el-table-column prop="producto" label="Producto" width="250"></el-table-column>
 		    <el-table-column prop="cantidad" label="Cantidad" width="150">
 		    	<template slot-scope="scope">
@@ -61,7 +63,7 @@
 				    </el-dropdown>
 		     	</template>
 		    </el-table-column>
-		    <template slot="empty">
+    	<template slot="empty">
 					<div class="o-040 mb-20">
 						<i class="fal fa-shopping-basket fa-10x mt-20"></i>
 						<br>
@@ -70,7 +72,10 @@
 						</p>
 					</div>
 		    </template>
-	    </el-table>
+   </el-table>
+			</div>
+		</div>
+
 	</div>
 </template>
 
@@ -84,15 +89,19 @@
 		data(){
 	  	return {
 	  		tableData: [],
+	  		rowsDelete: [],
 	  		total_monto: 0,
-				wholesale: false,
-				bar_code: null,
-				cellar: null,
-				loading: false
+					wholesale: false,
+					bar_code: null,
+					cellar: null,
+					loading: false
 	  	}
 		},
 		computed:{
-			...mapGetters(['table_detail'])
+			...mapGetters(['table_detail', 'editing_document']),
+			disabledWholesale(){
+				return  Object.keys(this.editing_document).length != 0
+			}
 		},
 		watch:{
 			table_detail:{
@@ -142,8 +151,8 @@
 							}
 							data.data.descuento = desto
 							data.data.monto_total = monto_total
-	            this.tableData.push(data.data)
-	            this.generateTotals(this.tableData);
+       this.tableData.push(data.data)
+       this.generateTotals(this.tableData);
 							this.bar_code = null;
 						}else{
 							if ((this.tableData[position_search].cantidad + 1) > (parseInt(datos[position_search].saldo))) {
@@ -170,8 +179,8 @@
 					}
     	}).catch(error => {
      		console.log(error)
-				this.loading = false
-   		});
+					this.loading = false
+   	});
 			},
 			calculateMonto(index, cantidad){
 				let me = this
@@ -186,11 +195,11 @@
 				}else{
 					let precio = this.tableData[index].precio_venta;
 					let desto = this.tableData[index].descuento_venta;
-					if(this.wholesale == true){
-						precio = this.tableData[index].precio_pormayor;
-						desto = this.tableData[index].descuento_pormayor;
-					}
-					console.log('desto: ', desto);
+					// if(this.wholesale == true){
+					// 	precio = this.tableData[index].precio_pormayor;
+					// 	desto = this.tableData[index].descuento_pormayor;
+					// }
+					console.log(desto);
 					desto = (desto * cantidad)
 					this.tableData[index].descuento = desto
 					this.tableData[index].iva = Math.round(((precio * cantidad) - desto)  * this.tableData[index].porcentaje_iva / 100, 0)
@@ -204,12 +213,12 @@
 				this.$store.dispatch('updateSubtotal', { data:datos, wholesale: this.wholesale})
 			},
 			updateValueDetail(){
-				let me = this;
-				if(this.tableData.length > 0){
-					this.tableData.forEach( function(value, index, array) {
-					    me.calculateMonto(index, value.cantidad)
-					});
-				}
+				// let me = this;
+				// if(this.tableData.length > 0){
+				// 	this.tableData.forEach( function(value, index, array) {
+				// 	  // me.calculateMonto(index, value.cantidad)
+				// 	});
+				// }
 			},
 			format(val){
 				var options = {
@@ -222,12 +231,12 @@
 				return accounting.formatMoney(val, options)
 			},
 			deleteRow(index, rows) {
-        rows.splice(index, 1);
+    rows.splice(index, 1);
 				if(this.tableData.length <= 0){
 					this.$store.dispatch('defaultTotals')
 				}
-        this.generateTotals(this.tableData);
-	    },
+   	this.generateTotals(this.tableData);
+   },
 			reset(){
 				this.$store.dispatch('defaultAll')
 				this.tableData = []

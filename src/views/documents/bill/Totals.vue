@@ -287,7 +287,8 @@ export default {
 			this.cupon = null
 			this.neto = 0
 		}
-  }
+
+		}
 }
 </script>
 

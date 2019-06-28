@@ -31,6 +31,7 @@ const getters = {
   people_editing: 	 state => state.people.people_editing,
   cupons_editing: 	 state => state.cupons.cupons_editing,
   // documentos
+  payment_methods: 	state => state.documents.payment_methods,
   totals: 			       state => state.documents.totals,
   wholesale:        state => state.documents.wholesale,
   form_document:    state => state.documents.form_document,
