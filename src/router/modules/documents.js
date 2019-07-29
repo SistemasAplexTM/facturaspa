@@ -4,7 +4,7 @@ import Bill from '../../views/documents/bill/Index.vue'
 import layouts from '../../layout'
 
 export default {
-	 path: '/documents',
+	path: '/documents',
   name: 'Documentos',
   component: Index,
   redirect: { path: '/index',name: 'index' },
