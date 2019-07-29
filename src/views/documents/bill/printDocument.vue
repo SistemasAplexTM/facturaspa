@@ -9,7 +9,7 @@
           <th colspan="5" id="consecutivo_document"><span class="pull-right"></span></th>
       </tr>
       <tr>
-          <th id="data_title" class="title1" style="text-align: right">{{ form_document.date }}</th>
+          <th id="data_title" class="title1" style="text-align: right">{{ form.date }}</th>
           <th id="data_title" class="title2" style="color: #FCFCFC"></th>
           <th id="data_title" rowspan="3" class="title3">
               <div></div>
@@ -22,15 +22,15 @@
       </tr>
       <tr>
           <td id="data_title" rowspan="2" style="text-align: right;width: 168px;font-size: 10px;">
-              &nbsp;{{ form_document.client.nombre }}<br>
-              &nbsp;{{ form_document.client.documento }}<br>
-              &nbsp;{{ form_document.client.telefono }}<br>
-              &nbsp;{{ form_document.client.email }}<br>
+              &nbsp;{{ form.client.nombre }}<br>
+              &nbsp;{{ form.client.documento }}<br>
+              &nbsp;{{ form.client.telefono }}<br>
+              &nbsp;{{ form.client.email }}<br>
           </td>
           <!-- <th id="data_title">{{ payment_methods_print() }}</th> -->
       </tr>
       <tr>
-          <td id="data_client"><br><br>{{ form_document.seller }}</td>
+          <td id="data_client"><br><br>{{ form.seller }}</td>
       </tr>
       <tr><td id="table2" colspan="5" style="">&nbsp;</td></tr>
       <!-- DETALLE DEL DOCUMENTO -->
@@ -104,12 +104,21 @@
 <script>
 import { mapGetters } from 'vuex'
 import accounting from 'accounting-js';
+import { documentById } from '@/api/document/document'
 
 export default {
   name: 'printDocument',
   data(){
     return {
-
+     form: {
+      consecutive: null,
+      date: null,
+      client: {},
+      days: 0,
+      date_receip: null,
+      seller: {},
+      observation: null,
+     }
     }
   },
   props: ['id_document'],
@@ -118,10 +127,48 @@ export default {
       'totals', 'table_detail', 'form_document', 'wholesale', 'payment_methods'
     ])
   },
+  mounted(){
+   this.getData()
+  },
   methods:{
     print() {
       this.$emit('modalPrint')
       window.print()
+    },
+    getData(){
+     // if (this.form_document.client.nombre) {
+     //  this.form = this.form_document
+     // }
+     let me = this
+     documentById(this.id_document).then(response => {
+       if (response.data) {
+        var data = response.data;
+        let date_r = new Date(data.document.fecha_recibido)
+        date_r.setDate(date_r.getDate() - 1)
+        var form = {
+         consecutive: data.document.consecutivo,
+         date: data.document.fecha,
+         days: data.document.dias,
+         client: data.client,
+         seller: data.seller.nombre,
+         observation: data.document.observacion,
+         date_receip: date_r
+        }
+        me.form = form
+        // me.$store.commit('SET_FORM_DOCUMENT', form)
+        me.$store.commit('SET_PAYMENT_METHODS', data.payment)
+        me.$store.commit('SET_WHOLESALE', data.document.pormayor)
+        me.$store.commit('SET_TABLE_DETAIL', data.detail)
+        me.$store.dispatch('updateSubtotal', { data:data.detail, wholesale: data.document.pormayor})
+        me.$store.commit('SET_ANTICIPO', data.document.anticipo)
+        setTimeout(function () {
+         me.print()
+        }, 300);
+       }
+     }).catch(error => {
+       console.log(error)
+       return false
+     })
     },
     format(val){
   			var options = {

@@ -45,16 +45,9 @@ export function documentById(id) {
   })
 }
 
-export function validateCashRegister() {
+export function getInventory(branch, data) {
   return request({
-    url: 'document/validateCashRegister',
-    method: 'get'
-  })
-}
-
-export function saveCashRegister(data) {
-  return request({
-    url: 'document/saveCashRegister',
+    url: 'document/getInventory/' + branch,
     method: 'post',
     data
   })

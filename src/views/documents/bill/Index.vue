@@ -22,20 +22,6 @@
 
   <payment :open="modalFP" @save="savePaymentMethod" :id_document="id_document" ref="payment"/>
 
-  <el-dialog
-    title="Base de caja"
-    :visible.sync="modalBC"
-    width="30%"
-    center
-    :before-close="closeBC">
-    <p>Por favor digite si base de caja.</p>
-    <el-input placeholder="0.00" v-model="bc">
-       <i slot="prefix" class="fal fa-dollar-sign mt-13 ml-5"></i>
-    </el-input>
-    <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="saveCashRegister" :disabled="bc <= 0">Aceptar</el-button>
-    </span>
-  </el-dialog>
  </div>
  <div v-else>
    <print-document v-if="!modalPrint2" @modalPrint="printFinihs" :id_document="id_document"/>
@@ -50,7 +36,7 @@ import PrintDocument from './printDocument'
 import PrintDocument2 from './printDocument2'
 import Payment from './Payment'
 import accounting from 'accounting-js'
-import { save, update, validateCashRegister, saveCashRegister } from '@/api/document/document'
+import { save, update } from '@/api/document/document'
 import { mapGetters } from 'vuex'
 export default {
   components: {
@@ -122,7 +108,6 @@ export default {
     //     this.reset(false)
     //   }
     // )
-    // this.validateCashRegister()
   },
   methods:{
     reset(confirm){
@@ -294,26 +279,7 @@ export default {
       this.$store.commit('SET_RECEIVED', price)
       this.$store.commit('SET_RETURN', price - this.totals.neto)
     },
-    validateCashRegister(){
-      validateCashRegister().then(({data}) => {
-        if (!data) {
-          this.modalBC = true
-        }
-      }).catch( error => { console.log(error) })
-    },
-    saveCashRegister(){
-      if (this.bc <= 0) {
-        return false
-      }
-      saveCashRegister({data: this.bc}).then(({data}) => {
-        if (data.code == 200) {
-          this.modalBC = false
-        }
-      }).catch(error => { console.log(error) })
-    },
-    closeBC(){
-      return false
-    }
+
   }
 }
 </script>

@@ -13,11 +13,11 @@
 		<!-- <el-menu-item index="/dashboard">
 			<i class="mdi mdi-gauge"></i><span slot="title">Inicio</span>
 		</el-menu-item> -->
-		<el-menu-item index="/bill/Factura de Venta">
-			<i class="mdi mdi-plus"></i><span slot="title">Nueva Factura</span>
-		</el-menu-item>
 		<el-menu-item index="/documents">
 			<i class="mdi mdi-file"></i><span slot="title">Facturas</span>
+		</el-menu-item>
+		<el-menu-item index="/bill/Factura de Venta">
+			<i class="mdi mdi-plus"></i><span slot="title">Nueva Factura</span>
 		</el-menu-item>
 		<!-- <el-menu-item index="/reports">
 			<i class="mdi mdi-file"></i><span slot="title">Informes</span>

@@ -5,7 +5,7 @@
 				<el-input type="search" placeholder="Ingresar código" size="small"
 				style="width:400px" v-model="bar_code" :disabled="loading" autofocus
 				@keyup.enter.native="getData(bar_code)" ref="bar_code">
-					<el-button slot="append" type="primary" @click="" class="pl-30 pr-30" :loading="loading">
+					<el-button slot="append" type="primary" @click="getInventory" class="pl-30 pr-30" :loading="loading">
 						<i v-show="!loading" class="fal fa-search"></i>
 					</el-button>
 				</el-input>
@@ -75,7 +75,7 @@
    </el-table>
 			</div>
 		</div>
-
+		<inventory-by-branch :open="InventoryOpen" @select="getData(...arguments)" @close="InventoryOpen = false"/>
 	</div>
 </template>
 
@@ -84,8 +84,10 @@
 	import { getByCode as getProductByCode } from '@/api/product'
 	import { mapGetters } from 'vuex'
 	import { getUser } from '@/utils/auth'
+	import InventoryByBranch from '../InventoryByBranch'
 
 	export default {
+		components: { InventoryByBranch },
 		data(){
 	  	return {
 	  		tableData: [],
@@ -94,7 +96,8 @@
 					wholesale: false,
 					bar_code: null,
 					cellar: null,
-					loading: false
+					loading: false,
+					InventoryOpen: false
 	  	}
 		},
 		computed:{
@@ -126,6 +129,7 @@
 			},
 			wholesale(val){
 				this.$store.commit('SET_WHOLESALE', val)
+				this.generateTotals(this.tableData);
 			}
 		},
 		methods:{
@@ -245,6 +249,9 @@
 				this.bar_code = null
 				this.generateTotals(this.tableData);
 				// this.$refs.bar_code.focus()
+			},
+			getInventory(){
+				this.InventoryOpen = true
 			}
 		}
 	}

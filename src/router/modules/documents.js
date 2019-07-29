@@ -28,7 +28,8 @@ export default {
      auth: true,
      layout: layouts.navLeft,
      searchable: true,
-     tags: ['app']
+     tags: ['app'],
+					cash: true
     }
    }
   ]

@@ -33,7 +33,7 @@
 							:columns="columns"
 							:rows="rows"
 							:search-options="{
-			    	enabled: true,
+			    	enabled: false,
 								rigger: 'enter',
 								placeholder: 'Buscar',
 							}"
@@ -65,10 +65,10 @@
 							<template slot="table-row" slot-scope="props">
 									<span v-if="props.column.field == 'actions'">
 										<el-tooltip content="Sin formato" placement="top">
-											<el-button @click="printDocument(1)" size="small" icon="el-icon-printer" title="Sin formato"></el-button>
+											<el-button @click="printDocument(props.row.id,1)" size="small" icon="el-icon-printer" title="Sin formato"></el-button>
 									</el-tooltip>
 										<el-tooltip content="Con membrete" placement="top">
-											<el-button @click="printDocument(2)" type="primary" size="small" icon="el-icon-printer" title="Con membrete"></el-button>
+											<el-button @click="printDocument(props.row.id,2)" type="primary" size="small" icon="el-icon-printer" title="Con membrete"></el-button>
 									</el-tooltip>
 											<!-- <span style="font-weight: bold; color: blue;">{{props.row.id}}</span> -->
 									</span>
@@ -194,11 +194,6 @@ export default {
 			};
 			return accounting.formatMoney(val, options)
 		},
-		test(){
-			// testDetail().then(({data}) => {
-			// 	console.log(data);
-			// }).catch(error => {console.log(error)})
-		},
 		selectType(type){
 			this.type_selected = type.id
 			this.type_selected_name = type.descripcion
@@ -213,7 +208,6 @@ export default {
 			// this.$router.push('/bill/' + this.type_selected_name)
 	 },
 		selectionChanged(){
-			// alert('Hola')
 			this.showActions = true
 		},
 		updateParams(newProps) {
@@ -248,14 +242,16 @@ export default {
 				});
 			}
   },
-		printDocument(format){
+		printDocument(id, format){
+			this.id_document = id
 			this.modalPrint = true
 			if (format == 2) {
 				this.modalPrint2 = true
 			}
 		},
 		printFinihs(){
-			alert('Finish')
+			this.modalPrint2 = false
+			this.modalPrint = false
 		}
 	}
 }

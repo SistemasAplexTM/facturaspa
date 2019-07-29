@@ -1,4 +1,5 @@
 import { removeToken, removeUser, getToken } from '@/utils/auth'
+import { getBC, removeBC } from '@/utils/global'
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -12,13 +13,13 @@ import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import Invoice from '../views/pages/Invoice.vue'
 
-import LayoutLeft from '../views/documents/LayoutSidebarLeft.vue'
 
 import layouts from '../layout'
 import store from '../store'
 
 import reports from './modules/reports'
 import documents from './modules/documents'
+import global from './modules/global'
 import Bill from '../views/documents/bill/Index.vue'
 
 Vue.use(Router)
@@ -32,17 +33,6 @@ const router = new Router({
 			alias: '/dashboard',
 			name: 'Inicio',
 			component: Bill,
-			meta: {
-				auth: true,
-				layout: layouts.navLeft,
-				searchable: true,
-				tags: ['app']
-			}
-		},
-		{
-			path: '/LayoutLeft',
-			name: 'LayoutLeft',
-			component: LayoutLeft,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
@@ -87,10 +77,12 @@ const router = new Router({
 		},
 		reports,
 		documents,
+		global,
 		{
 			path: '/logout',
 			beforeEnter (to, from, next) {
 				removeToken()
+				removeBC()
 				removeUser()
 				auth.logout()
 				next({path:'/login'})
@@ -178,6 +170,18 @@ router.afterEach((to, from) => {
 	setTimeout(()=>{
 		store.commit('setSplashScreen', false)
 	}, 500)
+})
+
+router.beforeEach((to, from, next) => {
+	if (to.name !== 'login' && to.name !== 'global/index') {
+		if (!getBC()) {
+				// next('/global/index')
+				window.location.href = '/global/index'
+				return false
+		}
+		next()
+	}
+	next()
 })
 
 export default router

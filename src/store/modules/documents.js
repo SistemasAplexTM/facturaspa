@@ -135,22 +135,51 @@ const documents = {
 
 		},
 		editing_document({ commit }, id){
-      if (!id) {
-        commit('SET_EDITING', '')
-        return false
-      }else{
-        return new Promise((resolve, reject) => {
-          documentById(id).then(response => {
-            if (!response.data) {
-              reject('error')
-            }
-            commit('SET_EDITING', response.data)
-          }).catch(error => {
-            reject(error)
-          })
+    if (!id) {
+      commit('SET_EDITING', '')
+      return false
+    }else{
+      return new Promise((resolve, reject) => {
+        documentById(id).then(response => {
+          if (!response.data) {
+            reject('error')
+          }
+          commit('SET_EDITING', response.data)
+        }).catch(error => {
+          reject(error)
         })
-      }
+      })
     }
+  },
+		setData({dispatch, commit}, id){
+			documentById(id).then(response => {
+					if (response.data) {
+						var data = response.data;
+						let date_r = new Date(data.document.fecha_recibido)
+						date_r.setDate(date_r.getDate() - 1)
+						var form = {
+							consecutive: data.document.consecutivo,
+							date: data.document.fecha,
+							days: data.document.dias,
+							client: data.client,
+							seller: data.seller.nombre,
+							observation: data.document.observacion,
+							date_receip: date_r
+						}
+						commit('SET_PAYMENT_METHODS', data.payment)
+						commit('SET_WHOLESALE', data.document.pormayor)
+						commit('SET_TABLE_DETAIL', data.detail)
+						commit('SET_FORM_DOCUMENT', form)
+						dispatch('updateSubtotal', { data:data.detail, wholesale: data.document.pormayor})
+						commit('SET_ANTICIPO', data.document.anticipo)
+						commit('SET_LIST', false)
+						return true
+					}
+			}).catch(error => {
+					console.log(error)
+					return false
+			})
+		}
 	}
 }
 
