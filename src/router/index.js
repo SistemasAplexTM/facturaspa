@@ -21,6 +21,7 @@ import reports from './modules/reports'
 import documents from './modules/documents'
 import global from './modules/global'
 import Bill from '../views/documents/bill/Index.vue'
+import User from '../views/users/Index.vue'
 
 Vue.use(Router)
 
@@ -49,6 +50,14 @@ const router = new Router({
 				layout: layouts.navLeft,
 				searchable: true,
 				tags: ['pages']
+			}
+		},
+		{
+			path: '/users',
+			name: 'users',
+			component: User,
+			meta: {
+				layout: layouts.navLeft
 			}
 		},
 		{
