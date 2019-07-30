@@ -24,22 +24,22 @@
 		</el-menu-item> -->
 
 
-		<!-- <div class="el-menu-item-group__title"><span>Pages</span></div>
+		<div class="el-menu-item-group__title"><span>Security</span></div>
 		<el-submenu index="authentication" popper-class="main-navigation-submenu">
 			<template slot="title">
 				<i class="mdi mdi-lock"></i><span>Authentication</span>
 			</template>
+			<el-menu-item index="/users">
+				<span slot="title">Users</span>
+			</el-menu-item>
 			<el-menu-item index="/logout">
-				<span slot="title">Login</span>
+				<span slot="title">Roles</span>
 			</el-menu-item>
 			<el-menu-item index="/register">
-				<span slot="title">Register</span>
-			</el-menu-item>
-			<el-menu-item index="/forgot-password">
-				<span slot="title">Forgot Password</span>
+				<span slot="title">Permissions</span>
 			</el-menu-item>
 		</el-submenu>
-		<el-menu-item index="/invoice">
+		<!-- <el-menu-item index="/invoice">
 			<i class="mdi mdi-file-document"></i><span slot="title">Invoice</span>
 		</el-menu-item>
 		<el-menu-item index="/404">
