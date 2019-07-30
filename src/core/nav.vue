@@ -9,20 +9,29 @@
 		class="main-navigation-menu"
 		:class="{'nav-collapsed':isCollapse}"
 	>
-		<!-- <div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div> -->
-		<!-- <el-menu-item index="/dashboard">
-			<i class="mdi mdi-gauge"></i><span slot="title">Inicio</span>
-		</el-menu-item> -->
-		<el-menu-item index="/documents">
-			<i class="mdi mdi-file"></i><span slot="title">Facturas</span>
-		</el-menu-item>
-		<el-menu-item index="/bill/Factura de Venta">
-			<i class="mdi mdi-plus"></i><span slot="title">Nueva Factura</span>
-		</el-menu-item>
-		<!-- <el-menu-item index="/reports">
-			<i class="mdi mdi-file"></i><span slot="title">Informes</span>
-		</el-menu-item> -->
+		<template v-if="searchPermission('otro')">
+			<!-- <div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div> -->
+			<!-- <el-menu-item index="/dashboard">
+				<i class="mdi mdi-gauge"></i><span slot="title">Inicio</span>
+			</el-menu-item> -->
+			<el-menu-item index="/documents">
+				<i class="mdi mdi-file"></i><span slot="title">Facturas</span>
+			</el-menu-item>
+			<el-menu-item index="/bill/Factura de Venta">
+				<i class="mdi mdi-plus"></i><span slot="title">Nueva Factura</span>
+			</el-menu-item>
+			<!-- <el-menu-item index="/reports">
+				<i class="mdi mdi-file"></i><span slot="title">Informes</span>
+			</el-menu-item> -->
+		</template>
 
+
+		<template v-if="searchPermission('gerencia')">
+			<div class="el-menu-item-group__title"><span>Informes</span></div>
+			<el-menu-item index="/reports">
+				<i class="mdi mdi-file-document"></i><span slot="title">General</span>
+			</el-menu-item>
+		</template>
 
 		<div class="el-menu-item-group__title"><span>Security</span></div>
 		<el-submenu index="authentication" popper-class="main-navigation-submenu">
@@ -39,18 +48,15 @@
 				<span slot="title">Permissions</span>
 			</el-menu-item>
 		</el-submenu>
-		<!-- <el-menu-item index="/invoice">
-			<i class="mdi mdi-file-document"></i><span slot="title">Invoice</span>
-		</el-menu-item>
-		<el-menu-item index="/404">
-			<i class="mdi mdi-alert-octagon"></i><span slot="title">404</span>
-		</el-menu-item> -->
+
+
 
 	</el-menu>
 </template>
 
 
 <script>
+import { getUser } from '@/utils/auth'
 import { detect } from 'detect-browser'
 const browser = detect()
 
@@ -59,12 +65,24 @@ export default {
 	props: ['mode', 'isCollapse'],
 	data() {
 		return {
+			permissions: getUser().roles,
 			isIe: true,
 			isEdge: true,
 			activeLink: null
 		}
 	},
+	mounted(){
+
+	},
 	methods: {
+		searchPermission(data){
+			const filtered = this.permissions.find(permission => permission.name === data);
+			if (typeof filtered !== 'undefined') {
+				return true
+			}else{
+				return false
+			}
+		},
 		goto(index, indexPath) {
 			if(index.charAt(0) === '/') {
 				this.$router.push(index)

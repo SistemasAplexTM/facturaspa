@@ -13,11 +13,21 @@
 			</div>
 			<div class="box grow card-base card-shadow--small p-30 scrollable only-y" v-loading="loading">
 				<div class="bb mb-10 pb-15 text-center">
-					<el-button icon="el-icon-download" type="success" size="small" class="fl"
-					@click="test">Descargar</el-button>
-					<!-- @click="test" :disabled="type_selected_name==null">Descargar</el-button> -->
-					<h2 class="" style="display:inline">{{ type_selected_name }}</h2>
+					<template v-if="showList">
+						<h2 class="" style="display:inline">&nbsp;{{ type_selected_name }}</h2>
+					</template>
+					<template v-else>
+						<h2 class="" style="display:inline">Seleccione una opción</h2>
+					</template>
 				</div>
+
+
+				<template v-if="showList">
+					<el-row :gutter="24">
+						<el-button icon="el-icon-download" type="success" size="small" class="fl"
+						@click="general">Descargar</el-button>
+					</el-row>
+				</template>
 			</div>
 		</div>
 	</div>
@@ -31,24 +41,22 @@ export default {
 		return {
 			type_selected: null,
 			type_selected_name: null,
-			types: ['Informe x Bodega'],
+			types: ['Informe General'],
 			loadingSidebar: false,
 			loading: false,
+			showList: false,
 			totalRecords: 0,
 		}
 	},
 	methods: {
-		test(){
+		general(){
 			this.loading = true
-			testDetail().then(({data}) => {
-				this.loading = false
-				console.log(data);
-			}).catch(error => {
-				this.loading = false
-				console.log(error)})
+			window.open(process.env.VUE_APP_ROOT + "moreSales/2019-07-20.2019-07-23/2/1")
+			this.loading = false
 		},
 		selectType(type){
 			// this.type_selected = type.id
+			this.showList = true
 			this.type_selected_name = type
 			this.isLoading = true
 		}
@@ -57,22 +65,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/scss/_variables';
+	@import '../../assets/scss/_variables';
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .2s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-
-.page-layout-sidebar-left {
-	margin-bottom: 80px;
-	.page-header {
-		border-radius: 5px;
-		padding-left: 15px;
-		margin-bottom: 20px;
+	.fade-enter-active, .fade-leave-active {
+	  transition: opacity .2s;
 	}
+	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	  opacity: 0;
+	}
+
+	.page-layout-sidebar-left {
+		margin-bottom: 80px;
+		.page-header {
+			border-radius: 5px;
+			padding-left: 15px;
+			margin-bottom: 20px;
+		}
 
 	.h-100{
 		max-height: 100%;
@@ -122,39 +130,39 @@ export default {
 	}
 }
 
-@media (max-width: 768px) {
-	.page-layout-sidebar-left {
-		.page-header {
-			.menu-btn {
-				display: block;
+	@media (max-width: 768px) {
+		.page-layout-sidebar-left {
+			.page-header {
+				.menu-btn {
+					display: block;
+				}
 			}
-		}
-		.sidebar {
+			.sidebar {
 
-			margin: 0;
-			text-align: center;
-			position: absolute;
-			background: white;
-			color: #000;
-			top: 5px;
-			left: -100%;
-			opacity: 0;
-			bottom: 5px;
-			box-shadow: 40px 0px 160px 80px rgba(0, 0, 0, 0.3);
-			border-top-right-radius: 4px;
-			border-bottom-right-radius: 4px;
-			transition: all .5s;
+				margin: 0;
+				text-align: center;
+				position: absolute;
+				background: white;
+				color: #000;
+				top: 5px;
+				left: -100%;
+				opacity: 0;
+				bottom: 5px;
+				box-shadow: 40px 0px 160px 80px rgba(0, 0, 0, 0.3);
+				border-top-right-radius: 4px;
+				border-bottom-right-radius: 4px;
+				transition: all .5s;
 
-			li {
-				border-bottom: 1px solid #eee;
-			}
+				li {
+					border-bottom: 1px solid #eee;
+				}
 
-			&.open {
-				opacity: 1;
-				left: 0;
-				z-index: 999;
+				&.open {
+					opacity: 1;
+					left: 0;
+					z-index: 999;
+				}
 			}
 		}
 	}
-}
 </style>

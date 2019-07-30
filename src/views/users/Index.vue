@@ -13,12 +13,13 @@
 <script>
 
 import { createRol, createPermission, assignRoleToPermission, deleteRoleToPermission, assignRoleToUser } from '@/api/user'
+import { getUser } from '@/utils/auth'
 
 export default {
 	name: 'User',
   data(){
    return{
-    //
+    user: getUser()
    }
   },
   methods:{
