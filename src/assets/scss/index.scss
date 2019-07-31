@@ -5,6 +5,10 @@ a {
   text-decoration: none;
 }
 
+.el-select, .el-date-editor.el-input, .el-date-editor{
+  width: 100%!important;
+}
+
 .img-circle {
   border-radius: 100px;
 }
