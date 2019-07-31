@@ -7,3 +7,11 @@ export function getByCode(data) {
     data
   })
 }
+
+export function getAllCategories(data) {
+  return request({
+    url: '/product/getAllCategories',
+    method: 'get',
+    data
+  })
+}

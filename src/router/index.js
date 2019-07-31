@@ -1,4 +1,4 @@
-import { removeToken, removeUser, getToken } from '@/utils/auth'
+import { removeToken, removeUser, getToken, getUser } from '@/utils/auth'
 import { getBC, removeBC } from '@/utils/global'
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -151,6 +151,14 @@ const auth = {
 	}
 }
 
+function enterRoute() {
+	if (getUser().roles.some(permission => permission.name === 'gerencia')) {
+		return '/reports'
+	}else{
+		return '/bill/Factura de Venta'
+	}
+}
+
 router.beforeEach((to, from, next) => {
 	let authrequired = false
 	if(to && to.meta && to.meta.auth)
@@ -161,7 +169,7 @@ router.beforeEach((to, from, next) => {
 	if(authrequired) {
 		if(auth.loggedIn()) {
 			if(to.name === 'login') {
-				window.location.href = '/bill/Factura de Venta'
+				window.location.href = enterRoute()
 				return false
 			} else {
 				next()
@@ -175,7 +183,7 @@ router.beforeEach((to, from, next) => {
 		}
 	} else {
 		if(auth.loggedIn() && to.name === 'login'){
-			window.location.href = '/bill/Factura de Venta'
+			window.location.href = enterRoute()
 			return false
 		} else {
 			next()
@@ -193,16 +201,15 @@ router.afterEach((to, from) => {
 	}, 500)
 })
 
-router.beforeEach((to, from, next) => {
-	if (to.name !== 'login' && to.name !== 'global/index') {
-		if (!getBC()) {
-				// next('/global/index')
-				window.location.href = '/global/index'
-				return false
-		}
-		next()
-	}
-	next()
-})
+// router.beforeEach((to, from, next) => {
+// 		if (to.name !== 'logout' && to.name !== 'login' && to.name !== 'global/index' && to.name !== 'invoice') {
+// 				if (!getBC()) {
+// 					window.location.href = '/global/index'
+// 					return false
+// 				}
+// 				next()
+// 		}
+// 	next()
+// })
 
 export default router
