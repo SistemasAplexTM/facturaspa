@@ -19,6 +19,9 @@
 		<el-menu-item index="/bill/Factura de Venta">
 			<i class="mdi mdi-plus"></i><span slot="title">Nueva Factura</span>
 		</el-menu-item>
+		<el-menu-item index="/test">
+			<i class="mdi mdi-plus"></i><span slot="title">Test</span>
+		</el-menu-item>
 		<!-- <el-menu-item index="/reports">
 			<i class="mdi mdi-file"></i><span slot="title">Informes</span>
 		</el-menu-item> -->

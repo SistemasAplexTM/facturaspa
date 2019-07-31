@@ -12,6 +12,7 @@ import Register from '../views/pages/authentication/Register.vue'
 import ForgotPassword from '../views/pages/authentication/ForgotPassword.vue'
 import NotFound from '../views/pages/NotFound.vue'
 import Invoice from '../views/pages/Invoice.vue'
+import Test from '../views/Test.vue'
 
 
 import layouts from '../layout'
@@ -45,6 +46,17 @@ const router = new Router({
 			path: '/invoice',
 			name: 'invoice',
 			component: Invoice,
+			meta: {
+				auth: true,
+				layout: layouts.navLeft,
+				searchable: true,
+				tags: ['pages']
+			}
+		},
+		{
+			path: '/test',
+			name: 'test',
+			component: Test,
 			meta: {
 				auth: true,
 				layout: layouts.navLeft,
