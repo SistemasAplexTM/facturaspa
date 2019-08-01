@@ -160,40 +160,64 @@ function enterRoute() {
 }
 
 router.beforeEach((to, from, next) => {
-	let authrequired = false
-	if(to && to.meta && to.meta.auth)
-		authrequired = true
-
-	//console.log('authrequired', authrequired, to.name)
-
-	if(authrequired) {
-		if(auth.loggedIn()) {
-			if(to.name === 'login') {
-				window.location.href = enterRoute()
-				return false
-			} else {
-				next()
-			}
-		} else {
-			if(to.name !== 'login'){
-				window.location.href = '/login'
-				return false
-			}
-			next()
-		}
-	} else {
-		if(auth.loggedIn() && to.name === 'login'){
-			window.location.href = enterRoute()
-			return false
-		} else {
-			next()
-		}
-	}
+	// let authrequired = false
+	// if(to && to.meta && to.meta.auth)
+	// authrequired = true
+	// if(authrequired) {
+	// 	if(auth.loggedIn()) {
+	// 		if(to.name === 'login') {
+	// 			window.location.href = enterRoute()
+	// 			return false
+	// 		} else {
+	// 			next()
+	// 		}
+	// 	} else {
+	// 		if(to.name !== 'login'){
+	// 			window.location.href = '/login'
+	// 			return false
+	// 		}
+	// 		next()
+	// 	}
+	// } else {
+	// 	if(auth.loggedIn() && to.name === 'login'){
+	// 		window.location.href = enterRoute()
+	// 		return false
+	// 	} else {
+	// 		next()
+	// 	}
+	// }
 
 	if(to && to.meta && to.meta.layout){
 		l.set(to.meta.layout)
 	}
 })
+
+
+//console.log('authrequired', authrequired, to.name)
+
+
+
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.auth) {
+//     const authUser = getUser()
+//     if (!authUser) {
+//       next({ name: 'login' })
+//     } else {
+//       // for (var i = 0; i < authUser.roles.length; i++) {
+//       //   if (to.meta.roles.includes(authUser.roles[i].guard_name)) {
+//           next()
+//       //     return false
+//       //   }
+//       // }
+//     }
+//   } else {
+//     if (to.name === 'login' && store.state.app.logged) {
+//       return false
+//     } else {
+//       next()
+//     }
+//   }
+// })
 
 router.afterEach((to, from) => {
 	setTimeout(()=>{
