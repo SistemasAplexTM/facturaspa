@@ -33,24 +33,24 @@
 							:columns="columns"
 							:rows="rows"
 							:search-options="{
-			    	enabled: false,
+			    		enabled: false,
 								rigger: 'enter',
 								placeholder: 'Buscar',
 							}"
 							:pagination-options="{
-					    enabled: true,
-					    mode: 'Registros',
-					    perPage: 10,
-					    position: 'bottom',
-					    perPageDropdown: [10, 20, 30],
-					    dropdownAllowAll: false,
-					    nextLabel: 'Siguiente',
-					    prevLabel: 'Anterior',
-					    rowsPerPageLabel: 'Registros por página',
-					    ofLabel: 'de',
-					    pageLabel: 'Página', // for 'pages' mode
-					    allLabel: 'Todos',
-					  }"
+						    enabled: true,
+						    mode: 'Registros',
+						    perPage: 10,
+						    position: 'bottom',
+						    perPageDropdown: [10, 20, 30],
+						    dropdownAllowAll: false,
+						    nextLabel: 'Siguiente',
+						    prevLabel: 'Anterior',
+						    rowsPerPageLabel: 'Registros por página',
+						    ofLabel: 'de',
+						    pageLabel: 'Página', // for 'pages' mode
+						    allLabel: 'Todos',
+						  }"
 							:responsive="true"
 							:isLoading.sync="isLoading"
 							:fixed-header="true"
@@ -58,9 +58,9 @@
 							@on-row-click="onRowClick"
 							@on-selected-rows-change="selectionChanged"
 							@on-page-change="onPageChange"
-					  @on-sort-change="onSortChange"
-					  @on-filter="onColumnFilter"
-					  @on-per-page-change="onPerPageChange"
+						  @on-sort-change="onSortChange"
+						  @on-filter="onColumnFilter"
+						  @on-per-page-change="onPerPageChange"
 							>
 							<template slot="table-row" slot-scope="props">
 									<span v-if="props.column.field == 'actions'">
@@ -175,13 +175,7 @@ export default {
  mounted(){
 		this.loadingSidebar = true
 		var rol = 1
-  getTypes(rol,this.user.sucursal_id).then(({data}) => {
-   this.types = data;
-			this.loadingSidebar = false
-			this.isLoading = false
-			this.selectType(data[0].type)
-
-  }).catch(error => {console.log(error);})
+		this.getTypesInit(rol)
  },
 	methods: {
 		format(val){
@@ -252,6 +246,15 @@ export default {
 		printFinihs(){
 			this.modalPrint2 = false
 			this.modalPrint = false
+		},
+		getTypesInit(rol){
+			getTypes(rol,this.user.sucursal_id).then(({data}) => {
+		   this.types = data;
+					this.loadingSidebar = false
+					this.selectType(data[0].type)
+					this.isLoading = false
+
+		  }).catch(error => {console.log(error);})
 		}
 	}
 }

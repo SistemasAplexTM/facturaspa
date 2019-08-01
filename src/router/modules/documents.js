@@ -1,7 +1,7 @@
 import Documents from '../../views/documents/Documents.vue'
 import Index from '../../views/documents/Index.vue'
 import Bill from '../../views/documents/bill/Index.vue'
-import layouts from '../../layout'
+import layouts from '@/layout'
 
 export default {
 	path: '/documents',
@@ -14,10 +14,11 @@ export default {
     name: 'index',
     component: Documents,
     meta: {
-     auth: true,
-     layout: layouts.navLeft,
-     searchable: true,
-     tags: ['app']
+			roles: ['admin', 'cashier'],
+			auth: true,
+			layout: layouts.navLeft,
+			searchable: true,
+			tags: ['app']
     }
    },
    {
@@ -25,11 +26,12 @@ export default {
     name: 'Factura',
     component: Bill,
     meta: {
-     auth: true,
-     layout: layouts.navLeft,
-     searchable: true,
-     tags: ['app'],
-					cash: true
+			roles: ['admin', 'cashier'],
+			auth: true,
+			layout: layouts.navLeft,
+			searchable: true,
+			tags: ['app'],
+			cash: true
     }
    }
   ]

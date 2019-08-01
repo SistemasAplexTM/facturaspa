@@ -1,3 +1,5 @@
+import { getUser } from '@/utils/auth'
+
 const app = {
  state: {
   money: {
@@ -17,7 +19,7 @@ const app = {
 			viewAnimation: 'fade-top' // fade-left, fade-right, fade-top, fade-top-in-out, fade-bottom, fade-bottom-in-out, fade, false
 		},
 		splashScreen: true,
-  logged: true
+  logged: getUser()
   },
   mutations: {
   setLayout(state, payload) {

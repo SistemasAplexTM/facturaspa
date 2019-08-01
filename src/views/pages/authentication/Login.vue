@@ -55,10 +55,18 @@ export default {
 			this.loading = true
 			login(this.email, this.password, false).then(({data}) => {
 				if (data.code === 200) {
-					this.$store.commit('setLogin')
-					this.$router.push({ path: '/bill/Factura de Venta' })
 					setToken(data.access_token)
 					setUser(data.user)
+					this.$store.commit('setLogin')
+					let user = JSON.parse(data.user)
+
+					for (var i = 0; i < user.roles.length; i++) {
+						if (user.roles[i].redirect_to) {
+							this.$router.push({ path: '/' + user.roles[i].redirect_to })
+						}else{
+							this.$router.push({ path: '/404'})
+						}
+		      }
 				}else {
 					this.error = true
 					this.errorMsg = 'Credenciales invalidas'

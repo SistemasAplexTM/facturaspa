@@ -151,8 +151,7 @@ export default {
 	methods: {
 		fileGeneral(){
 			this.loading = true
-			// console.log("moreSales/"+ this.date_rangue[0] +"."+ this.date_rangue[1] +"/"+ this.branch_id +"/"+ this.category_id);
-			window.open(process.env.VUE_APP_ROOT + "moreSales/"+ this.date_rangue[0] +"."+ this.date_rangue[1] +"/"+ this.branch_id +"/"+ this.category_id)
+			window.open(process.env.VUE_APP_ROOT + "moreSales/"+ this.date_rangue[0] +"/"+ this.date_rangue[1] +"/"+ this.branch_id +"/"+ this.category_id)
 			this.loading = false
 		},
 		selectType(type){

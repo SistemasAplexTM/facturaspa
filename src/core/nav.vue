@@ -9,7 +9,7 @@
 		class="main-navigation-menu"
 		:class="{'nav-collapsed':isCollapse}"
 	>
-		<template v-if="searchPermission('otro')">
+		<template v-if="show(['cashier', 'admin'])">
 			<!-- <div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div> -->
 			<!-- <el-menu-item index="/dashboard">
 				<i class="mdi mdi-gauge"></i><span slot="title">Inicio</span>
@@ -26,28 +26,30 @@
 		</template>
 
 
-		<template v-if="searchPermission('gerencia')">
+		<template v-if="show(['management'])">
 			<div class="el-menu-item-group__title"><span>Informes</span></div>
 			<el-menu-item index="/reports">
 				<i class="mdi mdi-file-document"></i><span slot="title">General</span>
 			</el-menu-item>
 		</template>
 
-		<div class="el-menu-item-group__title"><span>Security</span></div>
-		<el-submenu index="authentication" popper-class="main-navigation-submenu">
-			<template slot="title">
-				<i class="mdi mdi-lock"></i><span>Authentication</span>
-			</template>
-			<el-menu-item index="/users">
-				<span slot="title">Users</span>
-			</el-menu-item>
-			<el-menu-item index="/logout">
-				<span slot="title">Roles</span>
-			</el-menu-item>
-			<el-menu-item index="/register">
-				<span slot="title">Permissions</span>
-			</el-menu-item>
-		</el-submenu>
+		<template v-if="show(['admin'])">
+			<div class="el-menu-item-group__title"><span>Security</span></div>
+			<el-submenu index="authentication" popper-class="main-navigation-submenu">
+				<template slot="title">
+					<i class="mdi mdi-lock"></i><span>Authentication</span>
+				</template>
+				<el-menu-item index="/users">
+					<span slot="title">Users</span>
+				</el-menu-item>
+				<el-menu-item index="/logout">
+					<span slot="title">Roles</span>
+				</el-menu-item>
+				<el-menu-item index="/register">
+					<span slot="title">Permissions</span>
+				</el-menu-item>
+			</el-submenu>
+		</template>
 
 
 
@@ -65,7 +67,6 @@ export default {
 	props: ['mode', 'isCollapse'],
 	data() {
 		return {
-			permissions: getUser().roles,
 			isIe: true,
 			isEdge: true,
 			activeLink: null
@@ -75,20 +76,21 @@ export default {
 
 	},
 	methods: {
-		searchPermission(data){
-			const filtered = this.permissions.find(permission => permission.name === data);
-			if (typeof filtered !== 'undefined') {
-				return true
-			}else{
-				return false
-			}
+		show(data){
+			let authUser = getUser()
+			let res = false
+			for (var i = 0; i < authUser.roles.length; i++) {
+        if (data.includes(authUser.roles[i].guard_name)) {
+					res = true;
+        }
+      }
+			return res
 		},
 		goto(index, indexPath) {
 			if(index.charAt(0) === '/') {
 				this.$router.push(index)
 				this.$emit('push-page', {page:index})
 			}
-
 		},
 		setLink(path) {
 			this.activeLink = path
@@ -101,13 +103,8 @@ export default {
 		this.setLink(this.$router.currentRoute.path)
 		this.$router.afterEach((to, from) => {
 			this.setLink(this.$router.currentRoute.path)
-			//console.log('afterEach', to, from)
 		})
-		//console.log('this.$router.currentRoute.path', this.$router.currentRoute.path)
 	},
-	mounted() {
-		//console.log('nav component mounted')
-	}
 }
 </script>
 

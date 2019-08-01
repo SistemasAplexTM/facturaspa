@@ -6,9 +6,10 @@ export default {
   name: 'Informes',
   component: Reports,
   meta: {
-   auth: true,
-   layout: layouts.navLeft,
-   searchable: true,
-   tags: ['app']
+    roles: ['management'],
+    auth: true,
+    layout: layouts.navLeft,
+    searchable: true,
+    tags: ['app']
   }
 }
