@@ -1,10 +1,10 @@
-import BC from '../../views/global/BC.vue'
-import Index from '../../views/global/Index.vue'
-import layouts from '../../layout'
+import BC from '@/views/global/BC.vue'
+import Index from '@/views/global/Index.vue'
+import layouts from '@/layout'
 
 export default {
-	 path: '/global',
-  name: 'Global',
+	path: '/global',
+	name: 'Global',
   component: Index,
   redirect: { path: '/index',name: 'index' },
   children: [
@@ -14,9 +14,7 @@ export default {
     component: BC,
     meta: {
      auth: true,
-     layout: layouts.contenOnly,
-     searchable: true,
-     tags: ['app']
+     layout: layouts.contenOnly
     }
    }
   ]

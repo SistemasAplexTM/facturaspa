@@ -9,53 +9,24 @@
 		class="main-navigation-menu"
 		:class="{'nav-collapsed':isCollapse}"
 	>
-		<template v-if="show(['cashier', 'admin'])">
-			<!-- <div class="el-menu-item-group__title" style="padding-top: 4px;"><span>Apps</span></div> -->
-			<!-- <el-menu-item index="/dashboard">
-				<i class="mdi mdi-gauge"></i><span slot="title">Inicio</span>
-			</el-menu-item> -->
-			<el-menu-item index="/documents">
-				<i class="mdi mdi-file"></i><span slot="title">Facturas</span>
-			</el-menu-item>
-			<el-menu-item index="/bill/Factura de Venta">
-				<i class="mdi mdi-plus"></i><span slot="title">Nueva Factura</span>
-			</el-menu-item>
-			<!-- <el-menu-item index="/reports">
-				<i class="mdi mdi-file"></i><span slot="title">Informes</span>
-			</el-menu-item> -->
-		</template>
-
-
-		<template v-if="show(['management'])">
-			<div class="el-menu-item-group__title"><span>Informes</span></div>
-			<el-menu-item index="/reports">
-				<i class="mdi mdi-file-document"></i><span slot="title">General</span>
-			</el-menu-item>
-		</template>
-
-		<template v-if="show(['admin'])">
-			<div class="el-menu-item-group__title"><span>Security</span></div>
-			<el-submenu index="authentication" popper-class="main-navigation-submenu">
+		<template v-for="item in items" v-if="showItem(item)">
+			<el-submenu v-if="item.children" index="authentication" popper-class="main-navigation-submenu">
 				<template slot="title">
-					<i class="mdi mdi-lock"></i><span>Authentication</span>
+					<i :class="'mdi mdi-' + item.meta.icon"></i><span>{{ item.name }}</span>
 				</template>
-				<el-menu-item index="/users">
-					<span slot="title">Users</span>
-				</el-menu-item>
-				<el-menu-item index="/logout">
-					<span slot="title">Roles</span>
-				</el-menu-item>
-				<el-menu-item index="/register">
-					<span slot="title">Permissions</span>
+				<el-menu-item v-for="subItem in item.children" v-if="showItem(subItem)" :index="subItem.path">
+					<span slot="title">
+						<i :class="'mdi mdi-' + subItem.meta.icon"></i>
+						{{ subItem.name }}
+					</span>
 				</el-menu-item>
 			</el-submenu>
+			<el-menu-item v-else :index="item.path">
+				<i class="mdi mdi-file"></i><span slot="title">{{ item.name }}</span>
+			</el-menu-item>
 		</template>
-
-
-
 	</el-menu>
 </template>
-
 
 <script>
 import { getUser } from '@/utils/auth'
@@ -69,21 +40,34 @@ export default {
 		return {
 			isIe: true,
 			isEdge: true,
-			activeLink: null
+			activeLink: null,
+			items: []
 		}
 	},
-	mounted(){
-
-	},
+	mounted() {
+    this.$router.options.routes.forEach(route => {
+        this.items.push(route)
+    })
+  },
 	methods: {
 		show(data){
-			let authUser = getUser()
+			let roles = getUser('roles')
 			let res = false
-			for (var i = 0; i < authUser.roles.length; i++) {
-        if (data.includes(authUser.roles[i].guard_name)) {
+			for (var i = 0; i < roles.length; i++) {
+        if (data.includes(roles[i].guard_name)) {
 					res = true;
         }
       }
+			return res
+		},
+		showItem(item){
+			let res = false
+			if (item.meta && item.meta.nav) {
+				res = true
+				if (item.meta.roles) {
+					res = this.show(item.meta.roles)
+				}
+			}
 			return res
 		},
 		goto(index, indexPath) {
@@ -99,7 +83,6 @@ export default {
 	created() {
 		if(browser.name !== 'ie') this.isIe = false
 		if(browser.name !== 'edge') this.isEdge = false
-
 		this.setLink(this.$router.currentRoute.path)
 		this.$router.afterEach((to, from) => {
 			this.setLink(this.$router.currentRoute.path)

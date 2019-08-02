@@ -42,6 +42,7 @@ import 'animate.css'
 import 'flag-icon-css/css/flag-icon.css'
 import '../node_modules/mdi/scss/materialdesignicons.scss'
 import Affix from './directives/affix'
+import Can from './directives/can'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -73,6 +74,7 @@ Vue.use(VueLazyload, {
 	attempt: 1
 })
 Vue.directive('affix', Affix)
+Vue.directive('can', Can)
 Vue.use(Vuebar)
 Vue.use(VueGoodTable)
 Vue.component('vue-scroll', VuePerfectScrollbar)

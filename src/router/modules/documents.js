@@ -1,6 +1,6 @@
-import Documents from '../../views/documents/Documents.vue'
-import Index from '../../views/documents/Index.vue'
-import Bill from '../../views/documents/bill/Index.vue'
+import Documents from '@/views/documents/Documents.vue'
+import Index from '@/views/documents/Index.vue'
+import Bill from '@/views/documents/bill/Index.vue'
 import layouts from '@/layout'
 
 export default {
@@ -8,29 +8,30 @@ export default {
   name: 'Documentos',
   component: Index,
   redirect: { path: '/index',name: 'index' },
+	meta: { nav: true, icon: 'file' },
   children: [
    {
     path: '/index',
-    name: 'index',
+    name: 'Listar',
     component: Documents,
     meta: {
-			roles: ['admin', 'cashier'],
+			roles: ['management'],
+			icon: 'format-list-bulleted',
 			auth: true,
-			layout: layouts.navLeft,
-			searchable: true,
-			tags: ['app']
+			nav: true,
+			layout: layouts.navLeft
     }
    },
    {
     path: '/bill/:name',
-    name: 'Factura',
+    name: 'Nuevo',
     component: Bill,
     meta: {
 			roles: ['admin', 'cashier'],
+			icon: 'plus',
+			nav: true,
 			auth: true,
 			layout: layouts.navLeft,
-			searchable: true,
-			tags: ['app'],
 			cash: true
     }
    }

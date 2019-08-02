@@ -2,6 +2,11 @@
 	<div  v-if="!modalPrint" class="page-layout-sidebar-left" style="max-width: 100%">
 		<div class="page-header header-primary card-shadow--small flex p-5 br-5">
 			<div class="box grow">
+				<el-button type="success" plain class="fr" id="add_seller" v-can="'add_seller'"
+					@click="$message('Agregar vendedor.')"
+				>
+					<i class="fal fa-users-medical"></i>
+				</el-button>
 				<h1>{{ user.branch.razon_social }}</h1>
 			</div>
 		</div>

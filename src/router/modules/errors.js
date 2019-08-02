@@ -14,6 +14,7 @@ export default {
 			name: 'Unauthorized',
 			component: Unauthorized,
 			meta: {
+        nav: true,
 				layout: layouts.contenOnly
 			}
 		},
@@ -22,6 +23,7 @@ export default {
 			name: 'not-found',
 			component: NotFound,
 			meta: {
+        nav: true,
 				layout: layouts.contenOnly
 			}
 		}

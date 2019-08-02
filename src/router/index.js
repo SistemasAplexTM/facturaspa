@@ -4,12 +4,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 //pages
-import Login from '../views/pages/authentication/Login.vue'
+import Login from '@/views/pages/authentication/Login.vue'
 
-import layouts from '../layout'
-import store from '../store'
+import layouts from '@/layout'
+import store from '@/store'
 
-import Bill from '../views/documents/bill/Index.vue'
+import Bill from '@/views/documents/bill/Index.vue'
 
 // modules routes
 import reports from './modules/reports'
@@ -65,24 +65,15 @@ const l = {
 	navLeft(){
 		store.commit('setLayout', layouts.navLeft)
 	},
-	navRight(){
-		store.commit('setLayout', layouts.navRight)
-	},
-	navTop(){
-		store.commit('setLayout', layouts.navTop)
-	},
-	navBottom(){
-		store.commit('setLayout', layouts.navBottom)
-	},
 	set(layout){
 		store.commit('setLayout', layout)
 	}
 }
 
 router.beforeEach((to, from, next) => {
-	if(to && to.meta && to.meta.layout){
+	if(to && to.meta && to.meta.layout)
 		l.set(to.meta.layout)
-	}
+
   if (to.meta.auth) {
     const authUser = getUser()
     if (!authUser) {

@@ -28,7 +28,7 @@
 					<img src="../assets/images/avatar.jpg" class="avatar" alt="avatar">
 				</span>
 				<el-dropdown-menu slot="dropdown">
-					<el-dropdown-item command="/logout" divided><i class="mdi mdi-logout mr-10"></i> Logout</el-dropdown-item>
+					<el-dropdown-item command="/logout" divided><i class="mdi mdi-logout mr-10"></i> Salir</el-dropdown-item>
 				</el-dropdown-menu>
 			</el-dropdown>
 

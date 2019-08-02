@@ -13,9 +13,13 @@ export function removeToken() {
   return sessionStorage.removeItem(Token)
 }
 
-export function getUser() {
+export function getUser(param) {
   var data = sessionStorage.getItem(User)
-  return JSON.parse(data)
+  data = JSON.parse(data)
+  if (param) 
+    return data[param]
+
+  return data
 }
 
 export function setUser(user) {
