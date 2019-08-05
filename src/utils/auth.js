@@ -16,9 +16,9 @@ export function removeToken() {
 export function getUser(param) {
   var data = sessionStorage.getItem(User)
   data = JSON.parse(data)
-  if (param) 
+  if (param && data){
     return data[param]
-
+  }
   return data
 }
 

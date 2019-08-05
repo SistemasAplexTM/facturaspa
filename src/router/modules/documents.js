@@ -15,7 +15,7 @@ export default {
     name: 'Listar',
     component: Documents,
     meta: {
-			roles: ['management'],
+			roles: ['admin', 'management'],
 			icon: 'format-list-bulleted',
 			auth: true,
 			nav: true,

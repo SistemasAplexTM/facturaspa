@@ -66,7 +66,7 @@ export default {
 						}else{
 							this.$router.push({ path: '/404'})
 						}
-		      }
+     }
 				}else {
 					this.error = true
 					this.errorMsg = 'Credenciales invalidas'
