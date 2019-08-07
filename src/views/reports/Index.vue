@@ -65,17 +65,14 @@
 						    </el-option>
 						  </el-select>
 						</el-col>
-					  <!-- <el-col :span="6" :xs="24" :sm="24" :md="12" :lg="12" :xl="6" class="pb-10">
-							<span class=""><i class="fal fa-box-full"></i> Seleccione un producto</span>
-							<el-select v-model="product_id" filterable placeholder="Seleccione">
-						    <el-option
-						      v-for="item in products"
-						      :key="item.value"
-						      :label="item.label"
-						      :value="item.value">
-						    </el-option>
-						  </el-select>
-						</el-col> -->
+					  <el-col :span="6" :xs="24" :sm="24" :md="12" :lg="12" :xl="6" class="pb-10">
+							<div class="">&nbsp;</div>
+							<el-switch
+							  v-model="group"
+							  active-text="Agrupado"
+							  inactive-text="Sin agrupar">
+							</el-switch>
+						</el-col>
 					</el-row>
 					<el-row :gutter="20" class="mt-20">
 						<el-col :span="24">
@@ -100,11 +97,11 @@ export default {
 		return {
 			sidebarOpen: false,
 			type_selected: null,
-			type_selected_name: null,
+			type_selected_name: 'Informe General',
 			types: ['Informe General'],
 			loadingSidebar: false,
 			loading: false,
-			showFilter: false,
+			showFilter: true,
 			totalRecords: 0,
 			pickerOptions: {
         shortcuts: [{
@@ -140,6 +137,7 @@ export default {
 			category_id: null,
 			products: [],
 			product_id: null,
+			group: false
 		}
 	},
 	watch:{
@@ -148,10 +146,14 @@ export default {
 			this.getDataCategories()
 		}
 	},
+	mounted(){
+		this.getDataBranch()
+		this.getDataCategories()
+	},
 	methods: {
 		fileGeneral(){
 			this.loading = true
-			window.open(process.env.VUE_APP_ROOT + "moreSales/"+ this.date_rangue[0] +"/"+ this.date_rangue[1] +"/"+ this.branch_id +"/"+ this.category_id)
+			window.open(process.env.VUE_APP_ROOT + "moreSales/"+ this.date_rangue[0] +"/"+ this.date_rangue[1] +"/"+ this.branch_id +"/"+ this.category_id+"/"+ this.group)
 			this.loading = false
 		},
 		selectType(type){
